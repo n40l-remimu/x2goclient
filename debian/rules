@@ -92,6 +92,31 @@ else
   endif
 endif
 
+# lrelease fails to run when calling it via user mode emulation, because it
+# (wrongly) "detects" a cross-compiling situation and then fails to load the
+# default mkspec, for reasons I wasn't able to easily debug.
+# Thankfully, we can work around this issue by specifying QMAKESPEC directly.
+LRELEASE_WORKAROUND ?= 0
+LRELEASE_OVERRIDE :=
+
+ifneq ($(LRELEASE_WORKAROUND),0)
+  ifeq ($(VENDOR_DEBIAN),yes)
+    ifeq ($(shell /bin/bash -c '(( $(RELEASE_VER) >= 12 )) && echo '"'"'yes'"'"),yes)
+      ifeq ($(DEB_BUILD_GNU_TYPE),aarch64-linux-gnu)
+        LRELEASE_WORKAROUND := 1
+      else
+        ifeq ($(DEB_BUILD_GNU_TYPE),arm-linux-gnueabihf)
+          LRELEASE_WORKAROUND := 1
+        endif
+      endif
+    endif
+  endif
+endif
+
+ifneq ($(LRELEASE_WORKAROUND),0)
+  LRELEASE_OVERRIDE := "LRELEASE_BINARY=QMAKESPEC=$$(qmake -query 'QT_HOST_DATA')/mkspecs/$$(qmake -query 'QMAKE_SPEC') lrelease"
+endif
+
 # The preprocessing magic is highly inspired by the firefox package.
 IN_FILES := $(wildcard debian/*.in)
 preprocessed_filename = $(1:.in=)
@@ -115,7 +140,7 @@ override_dh_auto_configure:
 	dh_auto_configure
 
 override_dh_auto_build:
-	dh_auto_build -- 'QT_VERSION=$(QT_VERSION)'
+	dh_auto_build -- 'QT_VERSION=$(QT_VERSION)' $(LRELEASE_OVERRIDE)
 
 override_dh_auto_clean:
 	# Try to regenerate debian/control if necessary, but don't force it.
