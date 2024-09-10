@@ -92,14 +92,19 @@ else
   endif
 endif
 
-# lrelease fails to run when calling it via user mode emulation, because it
-# (wrongly) "detects" a cross-compiling situation and then fails to load the
-# default mkspec, for reasons I wasn't able to easily debug.
+# lrelease fails to run when calling it via user-mode emulation, because the
+# lprodump binary tries to fetch the default mkspec by calling "qmake -query"
+# and parsing its output, but does so via QProcess. QProcess fails to work in
+# user-mode emulation, at least when using the default vfork-like clone ()
+# call, so no data can be queried, leading to a hardcoded value being used,
+# which can't be resolved and ultimately leads to lprodump and release
+# failing.
 # Thankfully, we can work around this issue by specifying QMAKESPEC directly.
-LRELEASE_WORKAROUND ?= 0
+LRELEASE_WORKAROUND ?= auto
 LRELEASE_OVERRIDE :=
 
-ifneq ($(LRELEASE_WORKAROUND),0)
+ifeq ($(LRELEASE_WORKAROUND),auto)
+  LRELEASE_WORKAROUND := 0
   ifeq ($(VENDOR_DEBIAN),yes)
     ifeq ($(shell /bin/bash -c '(( $(RELEASE_VER) >= 12 )) && echo '"'"'yes'"'"),yes)
       ifeq ($(DEB_BUILD_GNU_TYPE),aarch64-linux-gnu)
