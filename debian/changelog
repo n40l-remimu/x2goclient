@@ -38,6 +38,16 @@ x2goclient (4.1.2.4-0x2go1) UNRELEASED; urgency=medium
   * x2goclient.spec:
     + Add Recommends: x2gokdriveclient for FC30+, RH 8+, *SuSE 15.4+.
     + Fix typo leading to FTBFS in Fedora macro.
+  * debian/rules:
+    + Work around lrelease failure when building under user-mode emulation.
+      In user-mode emulation, lrelease wrongly detects a cross-compiling
+      situation and fails to load the default mkspec for some reason.
+      Debugging this is incredibly frustrating, especially since strace and
+      gdb do not work correctly in user-mode emulation. Fortunately, we can
+      work around this issue by specifying QMAKESPEC directly, ironically with
+      values queried from qmake. We will do that for Debian 12+ only for now.
+      Note that this is not an issue with full-machine emulation, since the
+      inner system is unsuspecting to the actual bare-metal host.
 
   [ Juri Grabowski ]
   * New usptream version (4.1.2.4):
