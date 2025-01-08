@@ -1066,6 +1066,7 @@ private slots:
     void displayToolBar ( bool );
     void showSessionStatus();
     void slotSshConnectionError ( QString message, QString lastSessionError );
+    void slotSshConnectionDisconnect ( bool withError, QString disconnectMessage );
     void slotSshServerAuthError ( int error, QString sshMessage, SshMasterConnection* connection );
     void slotSshServerAuthPassphrase ( SshMasterConnection* connection, SshMasterConnection::passphrase_types passphrase_type );
     void slotSshInteractionStart ( SshMasterConnection* connection, QString prompt );

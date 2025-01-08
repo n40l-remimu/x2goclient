@@ -1903,6 +1903,25 @@ void SshMasterConnection::channelLoop()
         disconnectFlagMutex.lock();
         bool disconnect=disconnectSessionFlag;
         disconnectFlagMutex.unlock();
+        int stat=ssh_get_status(my_ssh_session);
+        if(stat==SSH_CLOSED_ERROR || stat ==SSH_CLOSED)
+        {
+            const char* errMsg=ssh_get_disconnect_message(my_ssh_session);
+            if(!errMsg)
+                errMsg=ssh_get_error(my_ssh_session);
+            if(stat==SSH_CLOSED_ERROR)
+            {
+                //throw message to the client!
+                x2goDebug<<"SSH session closed with error: "<<errMsg<<X2GO_COMPAT_ENDL;
+            }
+            else
+            {
+                x2goDebug<<"SSH session closed "<<errMsg<<X2GO_COMPAT_ENDL;
+            }
+            emit sessionDisconnected((stat==SSH_CLOSED_ERROR), QString(errMsg));
+            disconnect=true;
+        }
+
 
         if ( disconnect )
         {
