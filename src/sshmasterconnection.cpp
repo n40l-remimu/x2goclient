@@ -1987,6 +1987,7 @@ void SshMasterConnection::channelLoop()
 
         FD_ZERO ( &rfds );
 
+        bool haveChannelErrors=false;
         for ( int i=0; i<channelConnections.size(); ++i )
         {
             // Try to make a channel connection
@@ -1994,10 +1995,27 @@ void SshMasterConnection::channelLoop()
             bool res = createChannelConnection (i, maxsock, rfds, read_chan);
             if (!(res)) {
                 x2goDebug << "Connection to channel went wrong.";
-                continue;
+                //something is wrong here, let's check the state of ssh connection
+                stat=ssh_get_status(my_ssh_session);
+                if(stat==SSH_CLOSED_ERROR || stat ==SSH_CLOSED)
+                {
+                    break;
+                }
+                else
+                {
+                    continue;
+                }
             }
         }
         channelConnectionsMutex.unlock();
+        //let's check if the connection state haven't changed
+        if(stat==SSH_CLOSED_ERROR || stat ==SSH_CLOSED)
+        {
+            x2goDebug<<"Session disconnected, aborting loop"<<X2GO_COMPAT_ENDL;
+            delete [] read_chan;
+            delete [] out_chan;
+            break;
+        }
         retval=ssh_select ( read_chan,out_chan,maxsock+1,&rfds,&tv );
         delete [] read_chan;
         delete [] out_chan;
