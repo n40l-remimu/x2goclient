@@ -1906,9 +1906,11 @@ void SshMasterConnection::channelLoop()
         int stat=ssh_get_status(my_ssh_session);
         if(stat&SSH_CLOSED_ERROR || stat &SSH_CLOSED)
         {
-            const char* errMsg=ssh_get_disconnect_message(my_ssh_session);
-            if(!errMsg)
-                errMsg=ssh_get_error(my_ssh_session);
+            QString errMsg=ssh_get_disconnect_message(my_ssh_session);
+            if(errMsg.isEmpty())
+            {
+                errMsg=tr("SSH session closed, check your network connection");
+            }
             if(stat&SSH_CLOSED_ERROR)
             {
                 //throw message to the client!
@@ -1918,7 +1920,7 @@ void SshMasterConnection::channelLoop()
             {
                 x2goDebug<<"SSH session closed "<<errMsg<<X2GO_COMPAT_ENDL;
             }
-            emit sessionDisconnected((stat&SSH_CLOSED_ERROR), QString(errMsg));
+            emit sessionDisconnected((stat&SSH_CLOSED_ERROR), errMsg);
             disconnect=true;
         }
 
@@ -1987,7 +1989,6 @@ void SshMasterConnection::channelLoop()
 
         FD_ZERO ( &rfds );
 
-        bool haveChannelErrors=false;
         for ( int i=0; i<channelConnections.size(); ++i )
         {
             // Try to make a channel connection
