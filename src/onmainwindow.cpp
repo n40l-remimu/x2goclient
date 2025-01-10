@@ -3069,15 +3069,13 @@ SshMasterConnection* ONMainWindow::startSshConnection ( QString host, QString po
 
 void ONMainWindow::slotSshConnectionDisconnect ( bool withError, QString disconnectMessage )
 {
-    QString message;
+    QString message=tr("SSH session disconnected");
     if(withError)
     {
-        message=tr("SSH Connection disconnected with error");
         x2goErrorf(2)<< message  +": " +disconnectMessage;
     }
     else
     {
-        message=tr("SSH Connection disconnected");
         x2goDebug<<message +": "+ disconnectMessage;
     }
     if ( sshConnection )
