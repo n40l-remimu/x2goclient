@@ -3069,21 +3069,16 @@ SshMasterConnection* ONMainWindow::startSshConnection ( QString host, QString po
 
 void ONMainWindow::slotSshConnectionDisconnect ( bool withError, QString disconnectMessage )
 {
+    QString message;
     if(withError)
     {
-        QString message=tr("SSH Connection disconnected with error");
+        message=tr("SSH Connection disconnected with error");
         x2goErrorf(2)<< message  +": " +disconnectMessage;
-        QMessageBox::critical ( 0l,message,disconnectMessage,
-                            QMessageBox::Ok,
-                            QMessageBox::NoButton );
     }
     else
     {
-        QString message=tr("SSH Connection disconnected");
+        message=tr("SSH Connection disconnected");
         x2goDebug<<message +": "+ disconnectMessage;
-        QMessageBox::information ( 0l,message,disconnectMessage,
-                            QMessageBox::Ok,
-                            QMessageBox::NoButton );
     }
     if ( sshConnection )
     {
@@ -3094,6 +3089,9 @@ void ONMainWindow::slotSshConnectionDisconnect ( bool withError, QString disconn
     {
         slotProxyFinished ( -1,QProcess::CrashExit );
     }
+    QMessageBox::critical ( 0l,message,disconnectMessage,
+                            QMessageBox::Ok,
+                            QMessageBox::NoButton );
 }
 
 
@@ -7043,6 +7041,10 @@ void ONMainWindow::slotProxyFinished ( int,QProcess::ExitStatus )
         if ( brokerMode && (!config.brokerAutologoff) )
         {
             x2goDebug<<"Re-reading user's session profiles from broker.";
+            if(config.brokerSyncTimeout && !(brokerSyncTimer->isActive()))
+            {
+                brokerSyncTimer->start();
+            }
             QTimer::singleShot ( 2000,broker,
                                  SLOT ( getUserSessions() ) );
         }
