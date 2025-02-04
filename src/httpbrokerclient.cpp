@@ -516,6 +516,7 @@ void HttpBrokerClient::testConnection()
 
 void HttpBrokerClient::processClientConfig(const QString& raw_content)
 {
+    mainWindow->config.clientCfgIniFile.resize(0);
     mainWindow->config.clientCfgIniFile.open();
     QTextStream out(&(mainWindow->config.clientCfgIniFile));
     out<<raw_content;
@@ -553,6 +554,8 @@ void HttpBrokerClient::createIniFile(const QString& raw_content)
         cont=lines[1];
         cont=cont.split("END_USER_SESSIONS\n")[0];
     }
+
+    mainWindow->config.iniFile.resize(0);
 
     if(!sshBroker)
     {
