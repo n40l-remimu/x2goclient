@@ -138,6 +138,8 @@ ONMainWindow::ONMainWindow ( QWidget *parent ) :QMainWindow ( parent )
     resumeAfterSuspending=false;
     forceToShowTrayicon=false;
     splash=0;
+    config.iniFile.setAutoRemove(true);
+    config.clientCfgIniFile.setAutoRemove(true);
 
     /* Initialize at least these variables before they get filled via loadSettings()
      * They have to be initialized as they are used in closeEvent() and closeClient()...

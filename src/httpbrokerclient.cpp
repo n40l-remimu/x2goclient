@@ -516,7 +516,12 @@ void HttpBrokerClient::testConnection()
 
 void HttpBrokerClient::processClientConfig(const QString& raw_content)
 {
-    X2goSettings st(raw_content, QSettings::IniFormat);
+    mainWindow->config.clientCfgIniFile.open();
+    QTextStream out(&(mainWindow->config.clientCfgIniFile));
+    out<<raw_content;
+    mainWindow->config.clientCfgIniFile.close();
+    X2goSettings st(mainWindow->config.clientCfgIniFile, QSettings::IniFormat);
+
     mainWindow->config.brokerEvents=st.setting()->value("events",false).toBool();
     mainWindow->config.brokerLiveEventsTimeout=st.setting()->value("liveevent",0).toUInt();
     mainWindow->config.brokerSyncTimeout=st.setting()->value("syncinterval",0).toUInt();
@@ -569,7 +574,12 @@ void HttpBrokerClient::createIniFile(const QString& raw_content)
             }
             cont+=ln+"\n";
         }
-        mainWindow->config.iniFile=cont;
+
+        mainWindow->config.iniFile.open();
+        QTextStream out(&(mainWindow->config.iniFile));
+        out<<cont;
+        mainWindow->config.iniFile.close();
+
         if(resReplies.count()==0)
         {
             //we didn't request any resources, all session info is loaded
@@ -578,7 +588,10 @@ void HttpBrokerClient::createIniFile(const QString& raw_content)
     }
     else
     {
-        mainWindow->config.iniFile=cont;
+        mainWindow->config.iniFile.open();
+        QTextStream out(&(mainWindow->config.iniFile));
+        out<<cont;
+        mainWindow->config.iniFile.close();
         emit sessionsLoaded();
     }
     lines=content.split("START_CLIENT_CONFIG\n");

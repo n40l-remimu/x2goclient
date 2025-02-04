@@ -35,10 +35,10 @@
 #include <QDirIterator>
 #include <QApplication>
 #include <QDesktopWidget>
+#include <QTemporaryFile>
 #include <libssh/callbacks.h>
 #include "sshmasterconnection.h"
 #include "non_modal_messagebox.h"
-
 
 #ifdef Q_OS_WIN
 #include <windows.h>
@@ -53,7 +53,6 @@
 @author Oleksandr Shneyder
 */
 class QToolButton;
-class QTemporaryFile;
 class QLineEdit;
 class QFrame;
 class QVBoxLayout;
@@ -177,7 +176,8 @@ struct ConfigFile
     uint brokerSyncTimeout; //(seconds)How often synchronize with broker, 0 - not synchronize
     QString brokerSshKey;
     QString brokerCaCertFile;
-    QString iniFile;
+    QTemporaryFile iniFile;
+    QTemporaryFile clientCfgIniFile;
     QString server;
     QString serverIp;//Can be different from server (use for load balancing)
     QString sshport;

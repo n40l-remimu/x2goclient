@@ -19,7 +19,6 @@
 #define X2GOSETTINGS_H
 
 #include <QSettings>
-
 class QTemporaryFile;
 /**
 	@author Oleksandr Shneyder <oleksandr.shneyder@obviously-nice.de>
@@ -28,7 +27,7 @@ class X2goSettings
 {
 public:
     X2goSettings ( QString group );
-    X2goSettings ( QString fileContent, QSettings::Format format);
+    X2goSettings ( const QTemporaryFile& settingsFile, QSettings::Format format);
     ~X2goSettings();
 
     static bool centralSettings();
@@ -39,8 +38,6 @@ public:
 
 private:
     QSettings* set;
-    QTemporaryFile* cfgFile;
-
 };
 
 #endif
