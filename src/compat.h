@@ -130,7 +130,21 @@ class QStringCompatWrapper : public QString {
     }
 };
 
+class QStringListCompatWrapper : public QStringList {
+  public:
+    QStringListCompatWrapper () {
+    }
+
+    QStringListCompatWrapper (const QStringList &list) : QStringList (list) {
+    }
+
+    QStringCompatWrapper& operator[] (int i) {
+      return (this.at (i));
+    }
+};
+
 #define QString QStringCompatWrapper
-#endif
+#define QStringList QStringListCompatWrapper
+#endif /* QT_VERSION < QT_VERSION_CHECK (5, 14, 0) */
 
 #endif /* !defined (COMPAT_H) */
