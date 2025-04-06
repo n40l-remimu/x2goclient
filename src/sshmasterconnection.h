@@ -27,6 +27,7 @@
 #include <QTcpSocket>
 #include <QNetworkProxy>
 
+#include "compat.h"
 
 #define PROPERTY(TYPE,NAME)  private: TYPE NAME; \
 public: TYPE get_##NAME(){return NAME;} \

@@ -69,6 +69,10 @@ x2goclient (4.1.2.4-0x2go1) UNRELEASED; urgency=medium
     - src/compat.h: use the correct class name for the mapSkipBehavior ()
       helper function. Package should finally compile again now.
     - src/sharewidget.h: fix configwidget.h include.
+    - src/{sharewidget,exportdialog,folder{button,explorer},httpbrokerclient,
+           onmainwindow,session{button,explorer,managedialog,widget},
+           sshmasterconnection}.h: include compat.h to avoid misdefinition in
+      implementation files later on.
   * x2goclient.spec:
     + Add Recommends: x2gokdriveclient for FC30+, RH 8+, *SuSE 15.4+.
     + Fix typo leading to FTBFS in Fedora macro.

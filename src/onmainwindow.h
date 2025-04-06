@@ -49,6 +49,8 @@
 #include "pulsemanager.h"
 #endif /* defined (Q_OS_DARWIN) || defined (Q_OS_WIN) */
 
+#include "compat.h"
+
 /**
 @author Oleksandr Shneyder
 */

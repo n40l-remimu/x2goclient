@@ -20,6 +20,9 @@
 #include "x2goclientconfig.h"
 
 #include <QDialog>
+
+#include "compat.h"
+
 class QTreeWidget;
 class QTreeWidgetItem;
 class QPushButton;

@@ -28,6 +28,8 @@
 #include <QDateTime>
 #include <QSslSocket>
 #include "sshmasterconnection.h"
+#include "compat.h"
+
 /**
 	@author Oleksandr Shneyder <oleksandr.shneyder@obviously-nice.de>
 */

@@ -16,7 +16,10 @@
 ***************************************************************************/
 #ifndef FOLDEREXPLORER_H
 #define FOLDEREXPLORER_H
+
 #include "ui_folderexplorer.h"
+#include "compat.h"
+
 class SessionExplorer;
 class ONMainWindow;
 class FolderExplorer: public QDialog, Ui_FolderExplorer

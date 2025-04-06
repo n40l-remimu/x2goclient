@@ -22,6 +22,8 @@
 #include <QList>
 #include <QStringList>
 
+#include "compat.h"
+
 class SessionButton;
 class FolderButton;
 class ONMainWindow;
