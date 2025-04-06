@@ -82,6 +82,7 @@ x2goclient (4.1.2.4-0x2go1) UNRELEASED; urgency=medium
     - src/compat.h: also include QStringList, since we're returning it.
     - src/compat.h: define copy constructor for QLatin1String conversion.
     - src/compat.h: add copy constructor for QString base class.
+    - src/compat.h: add trivial/empty constructor.
   * x2goclient.spec:
     + Add Recommends: x2gokdriveclient for FC30+, RH 8+, *SuSE 15.4+.
     + Fix typo leading to FTBFS in Fedora macro.

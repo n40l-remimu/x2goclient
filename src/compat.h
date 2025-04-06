@@ -54,6 +54,9 @@ namespace Qt {
 
 class QStringCompatWrapper : public QString {
   public:
+    QStringCompatWrapper () {
+    }
+
     QStringCompatWrapper (const QLatin1String &str) : QString (str) {
     }
 
