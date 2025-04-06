@@ -55,37 +55,37 @@ class QStringCompatWrapper : public QString {
     Q_REQUIRED_RESULT
     QStringList split(const QString &sep, Qt::SplitBehavior behavior = Qt::KeepEmptyParts,
                       Qt::CaseSensitivity cs = Qt::CaseSensitive) const {
-      return (QString::split (sep, QString::mapSplitBehavior (behavior), cs));
+      return (QString::split (sep, QStringCompatWrapper::mapSplitBehavior (behavior), cs));
     }
     Q_REQUIRED_RESULT
     QStringList split(QChar sep, Qt::SplitBehavior behavior = Qt::KeepEmptyParts,
                       Qt::CaseSensitivity cs = Qt::CaseSensitive) const {
-      return (QString::split (sep, QString::mapSplitBehavior (behavior), cs));
+      return (QString::split (sep, QStringCompatWrapper::mapSplitBehavior (behavior), cs));
     }
 #if QT_VERSION >= QT_VERSION_CHECK (5, 0, 0)
     Q_REQUIRED_RESULT
     QVector<QStringRef> splitRef(const QString &sep,
                                  Qt::SplitBehavior behavior = Qt::KeepEmptyParts,
                                  Qt::CaseSensitivity cs = Qt::CaseSensitive) const {
-      return (QString::splitRef (sep, QString::mapSplitBehavior (behavior), cs));
+      return (QString::splitRef (sep, QStringCompatWrapper::mapSplitBehavior (behavior), cs));
     }
     Q_REQUIRED_RESULT
     QVector<QStringRef> splitRef(QChar sep, Qt::SplitBehavior behavior = Qt::KeepEmptyParts,
                                  Qt::CaseSensitivity cs = Qt::CaseSensitive) const {
-      return (QString::splitRef (sep, QString::mapSplitBehavior (behavior), cs));
+      return (QString::splitRef (sep, QStringCompatWrapper::mapSplitBehavior (behavior), cs));
     }
 #endif /* QT_VERSION >= QT_VERSION_CHECK (5, 0, 0) */
 #ifndef QT_NO_REGEXP
     Q_REQUIRED_RESULT
     QStringList split(const QRegExp &sep,
                       Qt::SplitBehavior behavior = Qt::KeepEmptyParts) const {
-      return (QString::split (sep, QString::mapSplitBehavior (behavior)));
+      return (QString::split (sep, QStringCompatWrapper::mapSplitBehavior (behavior)));
     }
 #if QT_VERSION >= QT_VERSION_CHECK (5, 0, 0)
     Q_REQUIRED_RESULT
     QVector<QStringRef> splitRef(const QRegExp &sep,
                                  Qt::SplitBehavior behavior = Qt::KeepEmptyParts) const {
-      return (QString::splitRef (sep, QString::mapSplitBehavior (behavior)));
+      return (QString::splitRef (sep, QStringCompatWrapper::mapSplitBehavior (behavior)));
     }
 #endif /* QT_VERSION >= QT_VERSION_CHECK (5, 0, 0) */
 #endif /* !defined (QT_NO_REGEXP) */
@@ -94,12 +94,12 @@ class QStringCompatWrapper : public QString {
     Q_REQUIRED_RESULT
     QStringList split(const QRegularExpression &sep,
                       Qt::SplitBehavior behavior = Qt::KeepEmptyParts) const {
-      return (QString::split (sep, QString::mapSplitBehavior (behavior)));
+      return (QString::split (sep, QStringCompatWrapper::mapSplitBehavior (behavior)));
     }
     Q_REQUIRED_RESULT
     QVector<QStringRef> splitRef(const QRegularExpression &sep,
                                  Qt::SplitBehavior behavior = Qt::KeepEmptyParts) const {
-      return (QString::splitRef (sep, QString::mapSplitBehavior (behavior)));
+      return (QString::splitRef (sep, QStringCompatWrapper::mapSplitBehavior (behavior)));
     }
 #endif /* !defined (QT_NO_REGULAREXPRESSION) */
 #endif /* QT_VERSION >= QT_VERSION_CHECK (5, 0, 0) */
