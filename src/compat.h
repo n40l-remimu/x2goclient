@@ -54,6 +54,9 @@ namespace Qt {
 
 class QStringCompatWrapper : public QString {
   public:
+    QStringCompatWrapper (const QLatin1String &str) : QString (str) {
+    }
+
     Q_REQUIRED_RESULT
     QStringList split(const QString &sep, Qt::SplitBehavior behavior = Qt::KeepEmptyParts,
                       Qt::CaseSensitivity cs = Qt::CaseSensitive) const {
