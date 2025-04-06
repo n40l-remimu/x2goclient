@@ -138,6 +138,10 @@ class QStringListCompatWrapper : public QStringList {
     QStringListCompatWrapper (const QStringList &list) : QStringList (list) {
     }
 
+    const QStringCompatWrapper& operator[] (int i) const {
+      return (this->at (i));
+    }
+
     QStringCompatWrapper& operator[] (int i) {
       return (this->at (i));
     }
