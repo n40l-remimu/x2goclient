@@ -18,7 +18,6 @@
 #include "folderbutton.h"
 #include "x2goclientconfig.h"
 #include "x2goutils.h"
-#include "compat.h"
 
 #include <QFont>
 #include <QPixmap>
@@ -34,6 +33,7 @@
 #include "sessionexplorer.h"
 #include <QMouseEvent>
 
+#include "compat.h"
 
 FolderButton::FolderButton ( ONMainWindow* mw,QWidget *parent, QString folderPath, QString folderName )
     : SVGFrame ( mw->images_resource_path("/svg/folder.svg"),false,parent )
