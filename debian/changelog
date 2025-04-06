@@ -45,6 +45,7 @@ x2goclient (4.1.2.4-0x2go1) UNRELEASED; urgency=medium
       would have needed to do this for .MAKEFLAGS the whole time anyway. Only
       .MAKEOVERRIDES on FreeBSD and NetBSD is special in that this variable
       actually expects a variable list, without values.
+    - src/compat.h: fix syntax error in/after enum declaration.
   * x2goclient.spec:
     + Add Recommends: x2gokdriveclient for FC30+, RH 8+, *SuSE 15.4+.
     + Fix typo leading to FTBFS in Fedora macro.

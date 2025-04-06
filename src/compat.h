@@ -44,7 +44,8 @@ namespace Qt {
   enum SplitBehaviorFlags {
     SkipEmptyParts = QString::SkipEmptyParts,
     KeepEmptyParts = QString::KeepEmptyParts,
-  }
+  };
+
   Q_DECLARE_FLAGS (SplitBehavior, SplitBehaviorFlags)
   Q_DECLARE_OPERATORS_FOR_FLAGS (SplitBehavior)
 }
