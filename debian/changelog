@@ -78,6 +78,7 @@ x2goclient (4.1.2.4-0x2go1) UNRELEASED; urgency=medium
       all the way up in order to get this working correctly, though.
     - src/{sharewidget.{cpp,h},configwidget.h}: move compat.h to the very top
       to see if the scheme actually holds up.
+    - src/compat.h: include QString properly.
   * x2goclient.spec:
     + Add Recommends: x2gokdriveclient for FC30+, RH 8+, *SuSE 15.4+.
     + Fix typo leading to FTBFS in Fedora macro.

@@ -24,6 +24,7 @@
 #if QT_VERSION >= QT_VERSION_CHECK (5, 0, 0)
 #include <QtCore/qflags.h>
 #endif /* QT_VERSION >= QT_VERSION_CHECK (5, 0, 0) */
+#include <QString>
 
 #ifdef Q_OS_DARWIN
 /*
