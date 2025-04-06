@@ -48,6 +48,11 @@ x2goclient (4.1.2.4-0x2go1) UNRELEASED; urgency=medium
     - src/compat.h: fix syntax error in/after enum declaration.
     - src/compat.h: QRegularExpression is Qt 5.0+ only, mask out for older
       versions.
+    - Makefile: try unquoting values passed via MAKEOVERRIDES/.MAKEFLAGS.
+      Quoting is obviously not eaten up by make and causing issues down the
+      line, so hope that values with spaces in them will be processed
+      correctly. Especially things like LDFLAGS, QMAKE_OPTS and the like.
+      Fingers crossed.
   * x2goclient.spec:
     + Add Recommends: x2gokdriveclient for FC30+, RH 8+, *SuSE 15.4+.
     + Fix typo leading to FTBFS in Fedora macro.
