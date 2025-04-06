@@ -60,6 +60,9 @@ x2goclient (4.1.2.4-0x2go1) UNRELEASED; urgency=medium
       impossible (especially since values with whitespace just can't be
       handled correctly). It also means that OpenBSD's Make is essentially
       broken, but there's nothing that can reasonably be done about this.
+    - src/compat.h: QString::splitRef () is Qt 5.0+, so mask out for older
+      versions as well. Remaining issue: fixing static_cast not working on the
+      different types...
   * x2goclient.spec:
     + Add Recommends: x2gokdriveclient for FC30+, RH 8+, *SuSE 15.4+.
     + Fix typo leading to FTBFS in Fedora macro.
