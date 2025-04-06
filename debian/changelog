@@ -63,6 +63,9 @@ x2goclient (4.1.2.4-0x2go1) UNRELEASED; urgency=medium
     - src/compat.h: QString::splitRef () is Qt 5.0+, so mask out for older
       versions as well. Remaining issue: fixing static_cast not working on the
       different types...
+    - src/compat.h: use mapSkipBehavior () helper to map Qt::SkipBehavior to
+      QString::SkipBehavior like Qt does (only vice versa), but also make it
+      static and private.
   * x2goclient.spec:
     + Add Recommends: x2gokdriveclient for FC30+, RH 8+, *SuSE 15.4+.
     + Fix typo leading to FTBFS in Fedora macro.
