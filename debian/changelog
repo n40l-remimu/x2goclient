@@ -36,6 +36,15 @@ x2goclient (4.1.2.4-0x2go1) UNRELEASED; urgency=medium
       macro to change all occurrences of QString to QStringCompatWrapper seems
       to be the only way to pull this off. In a rather ugly way.
     - src/compat.h: only try to include QtCore/qflags.h with Qt 5.0+.
+    - Makefile: pass actual values to variables in MAKEOVERRIDES and
+      .MAKEFLAGS. Not passing values leads to builds breaking with newer make
+      versions, since they are now passing MAKEOVERRIDES as-is, leading to
+      build failures since instead of exporting variables, the data passed is
+      now interpreted as a make target instead. Passing values should
+      (hopefully?) be compatible with older make versions, though, and we
+      would have needed to do this for .MAKEFLAGS the whole time anyway. Only
+      .MAKEOVERRIDES on FreeBSD and NetBSD is special in that this variable
+      actually expects a variable list, without values.
   * x2goclient.spec:
     + Add Recommends: x2gokdriveclient for FC30+, RH 8+, *SuSE 15.4+.
     + Fix typo leading to FTBFS in Fedora macro.
