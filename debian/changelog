@@ -53,6 +53,13 @@ x2goclient (4.1.2.4-0x2go1) UNRELEASED; urgency=medium
       line, so hope that values with spaces in them will be processed
       correctly. Especially things like LDFLAGS, QMAKE_OPTS and the like.
       Fingers crossed.
+    - Makefile: revert to the original behavior. This unbreaks older GNU Make
+      versions (up to 4.3), but leaves newer ones (4.4 and up) broken. This
+      unfortunately includes Debian Unstable for now. This is a regression in
+      GNU Make and will need to be handled there, since working around is nigh
+      impossible (especially since values with whitespace just can't be
+      handled correctly). It also means that OpenBSD's Make is essentially
+      broken, but there's nothing that can reasonably be done about this.
   * x2goclient.spec:
     + Add Recommends: x2gokdriveclient for FC30+, RH 8+, *SuSE 15.4+.
     + Fix typo leading to FTBFS in Fedora macro.
