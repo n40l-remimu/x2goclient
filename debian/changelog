@@ -89,6 +89,8 @@ x2goclient (4.1.2.4-0x2go1) UNRELEASED; urgency=medium
       QStringCompatWrapper object.
     - src/compat.h: fix compile error.
     - src/compat.h: add const operator [].
+    - src/compat.h: add copy constructor for QStringCompatWrapper to
+      QStringListCompatWrapper.
   * x2goclient.spec:
     + Add Recommends: x2gokdriveclient for FC30+, RH 8+, *SuSE 15.4+.
     + Fix typo leading to FTBFS in Fedora macro.
