@@ -57,6 +57,9 @@ class QStringCompatWrapper : public QString {
     QStringCompatWrapper (const QLatin1String &str) : QString (str) {
     }
 
+    QStringCompatWrapper (const QString &str) {
+    }
+
     Q_REQUIRED_RESULT
     QStringList split(const QString &sep, Qt::SplitBehavior behavior = Qt::KeepEmptyParts,
                       Qt::CaseSensitivity cs = Qt::CaseSensitive) const {
