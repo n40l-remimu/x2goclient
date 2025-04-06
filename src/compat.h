@@ -139,7 +139,7 @@ class QStringListCompatWrapper : public QStringList {
     }
 
     QStringCompatWrapper& operator[] (int i) {
-      return (this.at (i));
+      return (this->at (i));
     }
 };
 
