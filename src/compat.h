@@ -60,7 +60,7 @@ class QStringCompatWrapper : public QString {
     QStringCompatWrapper (const QLatin1String &str) : QString (str) {
     }
 
-    QStringCompatWrapper (const QString &str) {
+    QStringCompatWrapper (const QString &str) : QString (str) {
     }
 
     Q_REQUIRED_RESULT
