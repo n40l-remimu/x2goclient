@@ -85,6 +85,7 @@ class QStringCompatWrapper : public QString {
       return (QString::splitRef (sep, static_cast<QString::SplitBehavior> (behavior)));
     }
 #endif
+#if QT_VERSION >= QT_VERSION_CHECK (5, 0, 0)
 #ifndef QT_NO_REGULAREXPRESSION
     Q_REQUIRED_RESULT
     QStringList split(const QRegularExpression &sep,
@@ -97,6 +98,7 @@ class QStringCompatWrapper : public QString {
       return (QString::splitRef (sep, static_cast<QString::SplitBehavior> (behavior)));
     }
 #endif
+#endif /* QT_VERSION >= QT_VERSION_CHECK (5, 0, 0) */
 };
 
 #define QString QStringCompatWrapper
