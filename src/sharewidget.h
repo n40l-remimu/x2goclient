@@ -18,7 +18,7 @@
 #ifndef SHAREWIDGET_H
 #define SHAREWIDGET_H
 
-#include <configwidget.h>
+#include "configwidget.h"
 
 /**
 	@author Oleksandr Shneyder <oleksandr.shneyder@obviously-nice.de>
