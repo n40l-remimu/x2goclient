@@ -37,11 +37,12 @@ char *strndup (const char *s, size_t n);
 #endif /* defined (Q_OS_DARWIN) */
 
 #if QT_VERSION < QT_VERSION_CHECK (5, 14, 0)
-#define X2GO_COMPAT_SKIPEMPTYPARTS QString::SkipEmptyParts
-#define X2GO_COMPAT_KEEPEMPTYPARTS QString::KeepEmptyParts
-#else
-#define X2GO_COMPAT_SKIPEMPTYPARTS Qt::SkipEmptyParts
-#define X2GO_COMPAT_KEEPEMPTYPARTS Qt::KeepEmptyParts
+namespace Qt {
+  using SplitBehavior = QString::SplitBehavior;
+  const SplitBehavior SkipEmptyParts = SplitBehavior::SkipEmptyParts;
+  const SplitBehavior KeepEmptyParts = SplitBehavior::KeepEmptyParts;
+  const auto endl = ::endl;
+}
 #endif /* QT_VERSION < QT_VERSION_CHECK (5, 14, 0) */
 
 #endif /* !defined (COMPAT_H) */
