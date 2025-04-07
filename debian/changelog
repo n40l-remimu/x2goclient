@@ -103,8 +103,9 @@ x2goclient (4.1.2.4-0x2go1) UNRELEASED; urgency=medium
     - src/{exportdialog,folder{button,explorer},httpbrokerclient,
            onmainwindow,session{button,explorer,managedialog,widget},
            sharewidget,sshmasterconnectioni}.cpp: use compat macros.
-    - src/{{share,config}widget,exportdialog,folder{button,explorer},httpbrokerclient,
-           onmainwindow,session{button,explorer,managedialog,widget},
+    - src/{{share,config}widget,exportdialog,folder{button,explorer},
+           httpbrokerclient,onmainwindow,session{button,explorer,
+                                                 managedialog,widget},
            sshmasterconnection}.h: revert compat.h inclusion.
   * x2goclient.spec:
     + Add Recommends: x2gokdriveclient for FC30+, RH 8+, *SuSE 15.4+.
