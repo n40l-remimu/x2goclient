@@ -18,10 +18,8 @@
 #ifndef SHAREWIDGET_H
 #define SHAREWIDGET_H
 
-/* Keep compat.h at the top. */
-#include "compat.h"
-
 #include "configwidget.h"
+#include "compat.h"
 
 /**
 	@author Oleksandr Shneyder <oleksandr.shneyder@obviously-nice.de>

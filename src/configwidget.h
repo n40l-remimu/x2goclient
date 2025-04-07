@@ -18,11 +18,10 @@
 #ifndef CONFIGWIDGET_H
 #define CONFIGWIDGET_H
 
-/* Keep compat.h at the top. */
-#include "compat.h"
-
 #include <QFrame>
+
 #include "x2goclientconfig.h"
+#include "compat.h"
 
 /**
 	@author Oleksandr Shneyder <oleksandr.shneyder@obviously-nice.de>
