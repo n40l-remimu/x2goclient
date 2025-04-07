@@ -142,11 +142,11 @@ class QStringListCompatWrapper : public QStringList {
     }
 
     const QStringCompatWrapper& operator[] (int i) const {
-      return (static_cast<const QStringCompatWrapper&> (this[i]));
+      return (static_cast<const QStringCompatWrapper&> (this->operator[] (i)));
     }
 
     QStringCompatWrapper& operator[] (int i) {
-      return (static_cast<QStringCompatWrapper&> (this[i]));
+      return (static_cast<QStringCompatWrapper&> (this->operator[] (i)));
     }
 };
 
