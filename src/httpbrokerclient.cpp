@@ -854,7 +854,7 @@ void HttpBrokerClient::parseSession(QString sinfo)
         config->key=sinfo.mid(keyStartPos, keyEndPos+endStr.length()-keyStartPos);
     }
     QString serverLine=(lst[1].split("\n"))[0];
-    QStringList words=serverLine.split(":",QString::KeepEmptyParts);
+    QStringList words=serverLine.split(":",Qt::KeepEmptyParts);
     if ((words.isEmpty ()) || (words[0].isEmpty ())) {
         QString msg = tr ("Broker passed no server name or address.");
         x2goDebug << msg;
