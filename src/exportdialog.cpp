@@ -111,13 +111,13 @@ void ExportDialog::loadSessions()
     QString exports=st.setting()->value ( sessionId+"/export",
                                           ( QVariant ) QString() ).toString();
 
-    QStringList lst=exports.split ( ";",X2GO_COMPAT_SKIPEMPTYPARTS );
+    QStringList lst=exports.split ( ";",Qt::SkipEmptyParts );
     for ( int i=0; i<lst.size(); ++i )
     {
 #ifndef Q_OS_WIN
-        QStringList tails=lst[i].split ( ":",X2GO_COMPAT_SKIPEMPTYPARTS );
+        QStringList tails=lst[i].split ( ":",Qt::SkipEmptyParts );
 #else
-        QStringList tails=lst[i].split ( "#",X2GO_COMPAT_SKIPEMPTYPARTS );
+        QStringList tails=lst[i].split ( "#",Qt::SkipEmptyParts );
 #endif
         dirs<<tails[0];
     }

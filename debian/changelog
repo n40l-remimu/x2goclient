@@ -110,6 +110,10 @@ x2goclient (4.1.2.4-0x2go1) UNRELEASED; urgency=medium
     - src/compat.h: use new scheme, as shown on github/AD-Vega/qarv#22, which
       is arguably even better, because it lets us use Qt::... elements all the
       way!
+    - src/{exportdialog,folder{button,explorer},httpbrokerclient,
+           onmainwindow,session{button,explorer,managedialog,widget},
+           sharewidget,sshmasterconnectioni}.cpp: revert to not using compat
+      macros again, code should work out of the box now.
   * x2goclient.spec:
     + Add Recommends: x2gokdriveclient for FC30+, RH 8+, *SuSE 15.4+.
     + Fix typo leading to FTBFS in Fedora macro.

@@ -175,7 +175,7 @@ void SessionManageDialog::initFolders(QTreeWidgetItem* parent, QString path)
             QTreeWidgetItem* it=new QTreeWidgetItem(parent);
             it->setText(0,b->getName());
             it->setIcon(0, QIcon(*(b->folderIcon())));
-            QString normPath=(b->getPath()+"/"+b->getName()).split("/",X2GO_COMPAT_SKIPEMPTYPARTS).join("/");
+            QString normPath=(b->getPath()+"/"+b->getName()).split("/",Qt::SkipEmptyParts).join("/");
             it->setData(0,Qt::UserRole, normPath+"/");
             it->setData(0, SESSIONROLE , false);
             initFolders(it, normPath);
@@ -189,7 +189,7 @@ void SessionManageDialog::initFolders(QTreeWidgetItem* parent, QString path)
             QTreeWidgetItem* it=new QTreeWidgetItem(parent);
             it->setText(0,s->name());
             it->setIcon(0, QIcon(*(s->sessIcon())));
-            QString normPath=(s->getPath()+"/"+s->name()).split("/",X2GO_COMPAT_SKIPEMPTYPARTS).join("/");
+            QString normPath=(s->getPath()+"/"+s->name()).split("/",Qt::SkipEmptyParts).join("/");
             it->setData(0,Qt::UserRole, normPath+"/");
             it->setData(0, SESSIONROLE, true);
             it->setData(0, SESSIONIDROLE, i);
@@ -209,7 +209,7 @@ void SessionManageDialog::slot_endisable ( QTreeWidgetItem* item, int col)
     if(!isSess)
     {
         if(item)
-            currentPath=item->data(0,Qt::UserRole).toString().split("/",X2GO_COMPAT_SKIPEMPTYPARTS).join("/");
+            currentPath=item->data(0,Qt::UserRole).toString().split("/",Qt::SkipEmptyParts).join("/");
         else
 	    currentPath="/";
         x2goDebug << "slot_endisable: no session, currentPath(?): " << currentPath;

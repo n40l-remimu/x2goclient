@@ -383,7 +383,7 @@ void SessionButton::redraw()
                                         ( QVariant ) tr ( "New Session" ) ).toString();
 
 
-    QStringList tails=name.split("/",X2GO_COMPAT_SKIPEMPTYPARTS);
+    QStringList tails=name.split("/",Qt::SkipEmptyParts);
     if(tails.count()>0)
     {
         name=tails.last();

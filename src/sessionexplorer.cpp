@@ -499,7 +499,7 @@ void SessionExplorer::placeButtons()
 //Folder is not empty if it has sessions or not empty subfdolders
 bool SessionExplorer::isFolderEmpty(FolderButton* folder)
 {
-    QString normPath=(folder->getPath()+"/"+folder->getName()).split("/",X2GO_COMPAT_SKIPEMPTYPARTS).join("/");
+    QString normPath=(folder->getPath()+"/"+folder->getName()).split("/",Qt::SkipEmptyParts).join("/");
     for(int i=0; i<folders.count(); ++i)
     {
         if(folders[i]->getPath()==normPath)
@@ -519,7 +519,7 @@ bool SessionExplorer::isFolderEmpty(FolderButton* folder)
 QStringList SessionExplorer::getFolderChildren(FolderButton* folder)
 {
     QStringList children;
-    QString normPath=(folder->getPath()+"/"+folder->getName()).split("/",X2GO_COMPAT_SKIPEMPTYPARTS).join("/");
+    QString normPath=(folder->getPath()+"/"+folder->getName()).split("/",Qt::SkipEmptyParts).join("/");
 
     for(int i=0; i<folders.count(); ++i)
     {
@@ -582,7 +582,7 @@ int SessionExplorer::findFolder(QString path)
 {
     for(int i=0; i<folders.count(); ++i)
     {
-        QString normPath=(folders[i]->getPath()+"/"+folders[i]->getName()).split("/",X2GO_COMPAT_SKIPEMPTYPARTS).join("/");
+        QString normPath=(folders[i]->getPath()+"/"+folders[i]->getName()).split("/",Qt::SkipEmptyParts).join("/");
         if(normPath==path)
             return i;
     }
@@ -591,13 +591,13 @@ int SessionExplorer::findFolder(QString path)
 
 void SessionExplorer::slotFolderSelected(FolderButton* bt)
 {
-    currentPath=(bt->getPath()+"/"+bt->getName()).split("/",X2GO_COMPAT_SKIPEMPTYPARTS).join("/");
+    currentPath=(bt->getPath()+"/"+bt->getName()).split("/",Qt::SkipEmptyParts).join("/");
     placeButtons();
 }
 
 void SessionExplorer::slotLevelUp()
 {
-    QStringList levels=currentPath.split("/",X2GO_COMPAT_SKIPEMPTYPARTS);
+    QStringList levels=currentPath.split("/",Qt::SkipEmptyParts);
     if(levels.count())
     {
         levels.pop_back();
@@ -612,7 +612,7 @@ void SessionExplorer::setFolderIcon(QString path, QString icon)
     if(!pix.isNull())
     {
         pix=pix.scaled(64,64,Qt::KeepAspectRatio, Qt::SmoothTransformation);
-        path=path.split("/",X2GO_COMPAT_SKIPEMPTYPARTS).join("::");
+        path=path.split("/",Qt::SkipEmptyParts).join("::");
 
         X2goSettings *st;
         if (parent->getBrokerMode())
@@ -629,7 +629,7 @@ void SessionExplorer::setFolderIcon(QString path, QString icon)
         FolderButton* b;
         foreach(b, folders)
         {
-            if((b->getPath()+"/"+b->getName()).split("/",X2GO_COMPAT_SKIPEMPTYPARTS).join("::")==path)
+            if((b->getPath()+"/"+b->getName()).split("/",Qt::SkipEmptyParts).join("::")==path)
             {
                 b->loadIcon();
                 break;
@@ -661,10 +661,10 @@ void SessionExplorer::createNewFolder(QString path)
 void SessionExplorer::renameFolder(QString oldPath, QString currentPath)
 {
     FolderButton* b;
-    oldPath=oldPath.split("/",X2GO_COMPAT_SKIPEMPTYPARTS).join("/");
-    currentPath=currentPath.split("/",X2GO_COMPAT_SKIPEMPTYPARTS).join("/");
+    oldPath=oldPath.split("/",Qt::SkipEmptyParts).join("/");
+    currentPath=currentPath.split("/",Qt::SkipEmptyParts).join("/");
 
-    QStringList parts=oldPath.split("/",X2GO_COMPAT_SKIPEMPTYPARTS);
+    QStringList parts=oldPath.split("/",Qt::SkipEmptyParts);
     QString oldName=parts.last();
     parts.pop_back();
     QString pathOfFolder=parts.join("/");
@@ -674,7 +674,7 @@ void SessionExplorer::renameFolder(QString oldPath, QString currentPath)
     {
         if(b->getPath()==pathOfFolder && b->getName()==oldName)
         {
-            b->setName(currentPath.split("/",X2GO_COMPAT_SKIPEMPTYPARTS).last());
+            b->setName(currentPath.split("/",Qt::SkipEmptyParts).last());
         }
         if((b->getPath()+"/").indexOf(oldPath+"/")==0)
         {
@@ -737,7 +737,7 @@ void SessionExplorer::renameFolder(QString oldPath, QString currentPath)
 bool SessionExplorer::isFolderEmpty(QString path)
 {
     FolderButton* b;
-    path=path.split("/",X2GO_COMPAT_SKIPEMPTYPARTS).join("/");
+    path=path.split("/",Qt::SkipEmptyParts).join("/");
 
     foreach(b, folders)
     {
@@ -760,7 +760,7 @@ bool SessionExplorer::isFolderEmpty(QString path)
 
 void SessionExplorer::deleteFolder(QString path)
 {
-    path=path.split("/",X2GO_COMPAT_SKIPEMPTYPARTS).join("::");
+    path=path.split("/",Qt::SkipEmptyParts).join("::");
     X2goSettings *st;
     if (parent->getBrokerMode())
         st=new X2goSettings(parent->getConfig()->iniFile,QSettings::IniFormat);
@@ -775,7 +775,7 @@ void SessionExplorer::deleteFolder(QString path)
     for(int i=0; i< folders.count(); ++i)
     {
         FolderButton* b=folders[i];
-        if((b->getPath()+"/"+b->getName()).split("/",X2GO_COMPAT_SKIPEMPTYPARTS).join("/")==path)
+        if((b->getPath()+"/"+b->getName()).split("/",Qt::SkipEmptyParts).join("/")==path)
         {
             b->close();
             folders.removeAt(i);
