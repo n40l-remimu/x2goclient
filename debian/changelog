@@ -100,6 +100,9 @@ x2goclient (4.1.2.4-0x2go1) UNRELEASED; urgency=medium
       across the base later on.
     - src/{sharewidget.{cpp,h},configwidget.h}: move compat.h include back
       down.
+    - src/{exportdialog,folder{button,explorer},httpbrokerclient,
+           onmainwindow,session{button,explorer,managedialog,widget},
+           sharewidget,sshmasterconnectioni}.cpp: use compat macros.
   * x2goclient.spec:
     + Add Recommends: x2gokdriveclient for FC30+, RH 8+, *SuSE 15.4+.
     + Fix typo leading to FTBFS in Fedora macro.

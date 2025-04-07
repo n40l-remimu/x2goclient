@@ -815,7 +815,7 @@ void HttpBrokerClient::slotRequestFinished ( QNetworkReply*  reply )
 void HttpBrokerClient::parsePwdChangedResult(QString pwdchres)
 {
     x2goDebug<<"Starting parser.";
-    QStringList lst=pwdchres.split("PASSWORD CHANGED: ",Qt::SkipEmptyParts);
+    QStringList lst=pwdchres.split("PASSWORD CHANGED: ",X2GO_COMPAT_SKIPEMPTYPARTS);
     QString result = (lst[1].split("\n"))[0];
     x2goDebug<<"Password change result is: "<<result;
     x2goDebug<<"Parsing has finished.";
@@ -830,7 +830,7 @@ void HttpBrokerClient::parseSession(QString sinfo)
     config->sessiondata="";
     suspendedSession.clear();
     x2goDebug<<"Starting parser.";
-    QStringList lst=sinfo.split("SERVER:",Qt::SkipEmptyParts);
+    QStringList lst=sinfo.split("SERVER:",X2GO_COMPAT_SKIPEMPTYPARTS);
     int keyStartPos=sinfo.indexOf("-----BEGIN DSA PRIVATE KEY-----");
     if(keyStartPos==-1)
         keyStartPos=sinfo.indexOf("-----BEGIN RSA PRIVATE KEY-----");
@@ -854,7 +854,7 @@ void HttpBrokerClient::parseSession(QString sinfo)
         config->key=sinfo.mid(keyStartPos, keyEndPos+endStr.length()-keyStartPos);
     }
     QString serverLine=(lst[1].split("\n"))[0];
-    QStringList words=serverLine.split(":",QString::KeepEmptyParts);
+    QStringList words=serverLine.split(":",X2GO_COMPAT_KEEPEMPTYPARTS);
     if ((words.isEmpty ()) || (words[0].isEmpty ())) {
         QString msg = tr ("Broker passed no server name or address.");
         x2goDebug << msg;
@@ -886,10 +886,10 @@ void HttpBrokerClient::parseSession(QString sinfo)
     x2goDebug<<"Server port: "<<config->sshport;
     if (sinfo.indexOf("SESSION_INFO")!=-1)
     {
-        QStringList lst=sinfo.split("SESSION_INFO:",Qt::SkipEmptyParts);
+        QStringList lst=sinfo.split("SESSION_INFO:",X2GO_COMPAT_SKIPEMPTYPARTS);
         //config->sessiondata=lst[1];
         x2goDebug<<"Session data: "<<lst[1]<<"\n";
-        suspendedSession=lst[1].trimmed().split ( '\n', Qt::SkipEmptyParts );
+        suspendedSession=lst[1].trimmed().split ( '\n', X2GO_COMPAT_SKIPEMPTYPARTS );
         mainWindow->selectSession(suspendedSession);
     }
     else

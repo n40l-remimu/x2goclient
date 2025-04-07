@@ -520,7 +520,7 @@ void SessionWidget::readConfig()
                      sessionId+"/name",
                      ( QVariant ) tr ( "New session" ) ).toString().trimmed();
 
-    QStringList tails=name.split("/",Qt::SkipEmptyParts);
+    QStringList tails=name.split("/",X2GO_COMPAT_SKIPEMPTYPARTS);
     QString path;
     if(tails.count()>0)
     {
@@ -822,7 +822,7 @@ void SessionWidget::saveSettings()
 
     X2goSettings st ( "sessions" );
 
-    QString normPath=(lPath->text()+"/"+sessName->text()).split("/",Qt::SkipEmptyParts).join("/");
+    QString normPath=(lPath->text()+"/"+sessName->text()).split("/",X2GO_COMPAT_SKIPEMPTYPARTS).join("/");
 
     st.setting()->setValue ( sessionId+"/name",
                              ( QVariant ) normPath.trimmed() );
