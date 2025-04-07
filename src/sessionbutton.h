@@ -22,8 +22,6 @@
 #include <QPushButton>
 #include <QLabel>
 
-#include "compat.h"
-
 class ONMainWindow;
 class QComboBox;
 class QPushButton;

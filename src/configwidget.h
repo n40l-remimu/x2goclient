@@ -21,7 +21,6 @@
 #include <QFrame>
 
 #include "x2goclientconfig.h"
-#include "compat.h"
 
 /**
 	@author Oleksandr Shneyder <oleksandr.shneyder@obviously-nice.de>

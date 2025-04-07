@@ -21,8 +21,6 @@
 #include "x2goclientconfig.h"
 #include <QDialog>
 
-#include "compat.h"
-
 class QListView;
 class QPushButton;
 class QModelIndex;

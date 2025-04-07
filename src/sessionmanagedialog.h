@@ -21,8 +21,6 @@
 
 #include <QDialog>
 
-#include "compat.h"
-
 class QTreeWidget;
 class QTreeWidgetItem;
 class QPushButton;
