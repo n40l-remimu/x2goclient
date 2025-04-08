@@ -24,6 +24,7 @@
 #include <winnls.h>
 #include <AccCtrl.h>
 #include <aclapi.h>
+#include <uchar.h>
 #include "wapi.h"
 #include "x2gologdebug.h"
 
