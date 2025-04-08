@@ -218,7 +218,7 @@ void ShareWidget::readConfig()
 
     cbFsSshTun->setChecked ( st.setting()->value ( sessionId+"/fstunnel",
                              true ).toBool() );
-    QStringList lst=exportDir.split ( ";",Qt::SkipEmptyParts );
+    QStringList lst=exportDir.split ( ";",X2GO_COMPAT_SKIPEMPTYPARTS );
 
     QString toCode=st.setting()->value ( sessionId+"/iconvto",
                                          ( QVariant ) "UTF-8" ).toString();
@@ -254,9 +254,9 @@ void ShareWidget::readConfig()
     for ( int i=0; i<lst.size(); ++i )
     {
 #ifndef Q_OS_WIN
-        QStringList tails=lst[i].split ( ":",Qt::SkipEmptyParts );
+        QStringList tails=lst[i].split ( ":",X2GO_COMPAT_SKIPEMPTYPARTS );
 #else
-        QStringList tails=lst[i].split ( "#",Qt::SkipEmptyParts );
+        QStringList tails=lst[i].split ( "#",X2GO_COMPAT_SKIPEMPTYPARTS );
 #endif
         QStandardItem *item;
         item= new QStandardItem ( tails[0] );
