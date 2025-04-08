@@ -1625,7 +1625,7 @@ void ONMainWindow::closeClient()
 
 void ONMainWindow::closeEvent ( QCloseEvent* event )
 {
-    x2goDebug<<"Close event received."<<Qt::endl;
+    x2goDebug<<"Close event received."<<X2GO_COMPAT_ENDL;
 
     if (trayNoclose && !brokerMode)
     {
@@ -1649,7 +1649,7 @@ void ONMainWindow::hideEvent(QHideEvent* event)
 
 void ONMainWindow::trayQuit()
 {
-    x2goDebug<<"Quitting from tray icon and closing application."<<Qt::endl;
+    x2goDebug<<"Quitting from tray icon and closing application."<<X2GO_COMPAT_ENDL;
 
     closeClient();
     qApp->quit();
@@ -2292,7 +2292,7 @@ void ONMainWindow::slotConfig()
                     bool ret = pulseManager->set_record (!newDisableInput);
 
                     if (!ret) {
-                      x2goDebug << "Failed to change recording status of PulseManager. PulseAudio not started?" << Qt::endl;
+                      x2goDebug << "Failed to change recording status of PulseManager. PulseAudio not started?" << X2GO_COMPAT_ENDL;
                     }
                     pulseManager->restart ();
                 }
@@ -3262,7 +3262,7 @@ void ONMainWindow::slotSshServerAuthPassphrase(SshMasterConnection* connection, 
                                                         ok = true;
                                                         break;
         default:
-                                                        x2goDebug << "Unknown passphrase type requested! Was: " << passphrase_type << Qt::endl;
+                                                        x2goDebug << "Unknown passphrase type requested! Was: " << passphrase_type << X2GO_COMPAT_ENDL;
                                                         ok = false;
                                                         break;
     }
@@ -6254,7 +6254,7 @@ void ONMainWindow::slotTunnelOk(int)
 #endif
     for ( int l=0; l<env.size(); ++l )
     {
-// 		x2goDebug<<env[l]<<Qt::endl;
+// 		x2goDebug<<env[l]<<X2GO_COMPAT_ENDL;
 
 #if defined ( Q_OS_WIN ) || defined ( Q_OS_DARWIN )
         if ( env[l].indexOf ( "DISPLAY" ) ==0 )
@@ -6286,7 +6286,7 @@ void ONMainWindow::slotTunnelOk(int)
     {
         env <<"DISPLAY=localhost:"+disp;
 
-        /*		x2goDebug<<"new env DISPLAY"<<"DISPLAY=localhost:"+disp<<Qt::endl;*/
+        /*		x2goDebug<<"new env DISPLAY"<<"DISPLAY=localhost:"+disp<<X2GO_COMPAT_ENDL;*/
 
     }
     else
@@ -6294,7 +6294,7 @@ void ONMainWindow::slotTunnelOk(int)
         env[dispInd]="DISPLAY=localhost:"+disp;
 
         /*		x2goDebug<<"existing env DISPLAY("<<dispInd<<
-        		") DISPLAY=localhost:"+disp<<Qt::endl;*/
+        		") DISPLAY=localhost:"+disp<<X2GO_COMPAT_ENDL;*/
 
     }
 #endif // Q_OS_WIN
@@ -7066,7 +7066,7 @@ void ONMainWindow::slotShowPassForm()
 {
 #ifdef Q_OS_DARWIN
 //fixes bug, when mainwindow inputs not accepting focus under mac
-    x2goDebug<<"Setting focus."<<Qt::endl;
+    x2goDebug<<"Setting focus."<<X2GO_COMPAT_ENDL;
     QTimer::singleShot(500, this, SLOT(setFocus()));
     setFocus();
 #endif
@@ -7745,14 +7745,14 @@ void ONMainWindow::slotReadApplications(bool result, QString output,
             {
                 app.name=QString::fromUtf8(line.split("=")[1].toLatin1());
 
-                //                 x2goDebug<<"local name: "<<app.name<<Qt::endl;
+                //                 x2goDebug<<"local name: "<<app.name<<X2GO_COMPAT_ENDL;
 
                 localname=true;
             }
             if (line.indexOf("Comment["+localshort+"]=")!=-1 || line.indexOf("Comment["+locallong+"]=")!=-1)
             {
                 app.comment=QString::fromUtf8(line.split("=")[1].toLatin1());
-                //                 x2goDebug<<"local comment: "<<app.comment<<Qt::endl;
+                //                 x2goDebug<<"local comment: "<<app.comment<<X2GO_COMPAT_ENDL;
                 localcomment=true;
             }
             if (line.indexOf("Name=")!=-1 && !localname)
@@ -7762,13 +7762,13 @@ void ONMainWindow::slotReadApplications(bool result, QString output,
                 {
                     if (app.name==autostartApps[i])
                         startAppsFound.append(app.name);
-                    //                 x2goDebug<<"name: "<<app.name<<Qt::endl;
+                    //                 x2goDebug<<"name: "<<app.name<<X2GO_COMPAT_ENDL;
                 }
             }
             if (line.indexOf("Comment=")!=-1 && !localcomment)
             {
                 app.comment=line.split("=")[1];
-                //                 x2goDebug<<"comment: "<<app.comment<<Qt::endl;
+                //                 x2goDebug<<"comment: "<<app.comment<<X2GO_COMPAT_ENDL;
             }
             if (line.indexOf("Exec=")!=-1)
             {
@@ -7783,7 +7783,7 @@ void ONMainWindow::slotReadApplications(bool result, QString output,
                 {
                     if (app.exec==autostartApps[i])
                         startAppsFound.append(app.exec);
-                    //                 x2goDebug<<"exec: "<<app.exec<<Qt::endl;
+                    //                 x2goDebug<<"exec: "<<app.exec<<X2GO_COMPAT_ENDL;
                 }
             }
             if (line.indexOf("Categories=")!=-1)
@@ -9218,7 +9218,7 @@ directory* ONMainWindow::getExpDir ( QString key )
 void ONMainWindow::slotRetExportDir ( bool result,QString output,
                                       int pid)
 {
-    x2goDebug<<"Post-cleanup for startX2goMount triggered."<<Qt::endl;
+    x2goDebug<<"Post-cleanup for startX2goMount triggered."<<X2GO_COMPAT_ENDL;
     QString key;
     for ( int i=0; i<exportDir.size(); ++i )
         if ( exportDir[i].pid==pid )
@@ -9231,7 +9231,7 @@ void ONMainWindow::slotRetExportDir ( bool result,QString output,
     if ( result==false )
     {
         QString message=tr ( "<b>Connection failed.</b>\n" ) +output;
-        x2goDebug<<"startX2goMount failed to mount client-side folder, reason: "<<message<<Qt::endl;
+        x2goDebug<<"startX2goMount failed to mount client-side folder, reason: "<<message<<X2GO_COMPAT_ENDL;
         if ( message.indexOf ( "publickey,password" ) !=-1 )
         {
             message=tr ( "<b>Wrong password!</b><br><br>" ) +
@@ -9311,7 +9311,7 @@ void ONMainWindow::slotExtTimer()
                  <<"must be"<< ( int ) ( QFile::ReadUser|QFile::WriteUser
                                          |QFile::ExeUser|QFile::ReadOwner|
                                          QFile::WriteOwner|
-                                         QFile::ExeOwner ) <<Qt::endl;
+                                         QFile::ExeOwner ) <<X2GO_COMPAT_ENDL;
 
         if ( extLogin )
             extTimer->stop();
@@ -9383,13 +9383,13 @@ void ONMainWindow::slotExportTimer()
     {
 
         x2goDebug<<"Wrong permissions on "<<
-                 readExportsFrom <<":"<<Qt::endl;
+                 readExportsFrom <<":"<<X2GO_COMPAT_ENDL;
         x2goDebug<< ( int ) ( QFile::permissions (
                                   readExportsFrom+"/." ) )
                  <<"must be"<< ( int ) ( QFile::ReadUser|QFile::WriteUser
                                          |QFile::ExeUser|QFile::ReadOwner|
                                          QFile::WriteOwner|
-                                         QFile::ExeOwner ) <<Qt::endl;
+                                         QFile::ExeOwner ) <<X2GO_COMPAT_ENDL;
         exportTimer->stop();
         return;
     }
@@ -9768,7 +9768,7 @@ void ONMainWindow::slotScDaemonFinished ( int , QProcess::ExitStatus )
 {
     //this should not happen, restart...
     scDaemon=0l;
-    x2goDebug<<"SCDAEMON finished."<<Qt::endl;
+    x2goDebug<<"SCDAEMON finished."<<X2GO_COMPAT_ENDL;
     slotStartPGPAuth();
 }
 
@@ -10313,7 +10313,7 @@ void ONMainWindow::slotFsTunnelFailed ( bool result,  QString output,
 
 void ONMainWindow::slotFsTunnelOk(int)
 {
-    x2goDebug<<"FS tunnel through SSH seems to be up and running ..."<<Qt::endl;
+    x2goDebug<<"FS tunnel through SSH seems to be up and running ..."<<X2GO_COMPAT_ENDL;
 
     fsTunReady=true;
     //start reverse mounting if RSA Key and FS tunnel are ready
@@ -10508,7 +10508,7 @@ void ONMainWindow::startX2goMount()
         }
     }
 
-    x2goDebug<<"Calling startX2goMount command."<<Qt::endl;
+    x2goDebug<<"Calling startX2goMount command."<<X2GO_COMPAT_ENDL;
     dir->pid=sshConnection->executeCommand(cmd,this,SLOT ( slotRetExportDir ( bool,
                                            QString,int) ));
 }
@@ -10896,7 +10896,7 @@ void ONMainWindow::slotCheckXOrgConnection()
                  * Server might still be running here, but deleting the QProcess object
                  * should kill it.
                  */
-                x2goDebug << "Timeout reached waiting for the X.Org Server to open a listening TCP socket." << Qt::endl
+                x2goDebug << "Timeout reached waiting for the X.Org Server to open a listening TCP socket." << X2GO_COMPAT_ENDL
                           << "Restarting on higher DISPLAY port. Try count: " << x_start_tries_;
 
                 xorg->terminate ();
@@ -11933,18 +11933,18 @@ void ONMainWindow::slotConfigXinerama()
             intersection=root->screenGeometry(i).intersected(lastDisplayGeometry);
         if (!intersection.isNull())
         {
-            //            x2goDebug<<"intersected with "<<i<<": "<<intersection<<Qt::endl;
+            //            x2goDebug<<"intersected with "<<i<<": "<<intersection<<X2GO_COMPAT_ENDL;
             intersection.moveLeft(intersection.x()-lastDisplayGeometry.x());
             intersection.moveTop(intersection.y()-lastDisplayGeometry.y());
 
-            //            x2goDebug<<"xinerama screen: "<<intersection<<Qt::endl;
+            //            x2goDebug<<"xinerama screen: "<<intersection<<X2GO_COMPAT_ENDL;
             newXineramaScreens<<intersection;
         }
     }
     if (xineramaScreens != newXineramaScreens)
     {
         xineramaScreens=newXineramaScreens;
-        //        x2goDebug<<"xinerama screen changed, new screens: "<<xineramaScreens<<Qt::endl;
+        //        x2goDebug<<"xinerama screen changed, new screens: "<<xineramaScreens<<X2GO_COMPAT_ENDL;
 
         xineramaTimer->stop();
         QStringList screens;

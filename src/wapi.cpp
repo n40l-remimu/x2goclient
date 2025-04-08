@@ -31,6 +31,8 @@
 #include <QtWin>
 #endif
 
+#include "compat.h"
+
 long wapiSetFSWindow ( HWND hWnd, const QRect& desktopGeometry )
 {
     SetWindowLong(hWnd, GWL_STYLE,
@@ -247,10 +249,10 @@ void wapiSetWindowIcon ( HWND wnd, const QPixmap& icon)
     x2goDebug<<"Small icon: "<<smallIcon<<smallx<<"x"<<smally;
     int rez=SetClassLong(wnd,GCL_HICON, (LONG)largeIcon);
     if (!rez)
-        x2goDebug<<"ERROR: "<<GetLastError()<<Qt::endl;
+        x2goDebug<<"ERROR: "<<GetLastError()<<X2GO_COMPAT_ENDL;
     rez=SetClassLong(wnd,GCL_HICONSM,(LONG)smallIcon);
     if (!rez)
-        x2goDebug<<"ERROR: "<<GetLastError()<<Qt::endl;
+        x2goDebug<<"ERROR: "<<GetLastError()<<X2GO_COMPAT_ENDL;
     /*    ShowWindow(wnd, SW_HIDE);
         ShowWindow(wnd, SW_SHOW);*/
 }

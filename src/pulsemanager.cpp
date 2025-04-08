@@ -29,6 +29,7 @@
 #include "pulsemanager.h"
 #include "x2gologdebug.h"
 #include "x2goutils.h"
+#include "compat.h"
 
 PulseManager::PulseManager () : app_dir_ (QApplication::applicationDirPath ()),
                                 pulse_X2Go_ ("/.x2go/pulse"),
@@ -366,7 +367,7 @@ void PulseManager::fetch_pulseaudio_version () {
     QString stdout_data (ba.constData ());
     QStringList stdout_list (stdout_data.split ("\n"));
 
-    x2goDebug << "pulseaudio --version returned:" << stdout_data << Qt::endl;
+    x2goDebug << "pulseaudio --version returned:" << stdout_data << X2GO_COMPAT_ENDL;
 
     bool found = false;
     for (QStringList::const_iterator cit = stdout_list.begin (); (cit != stdout_list.end ()) && (!stop_processing); ++cit) {
@@ -632,16 +633,16 @@ bool PulseManager::generate_server_config () {
       config_tmp_file_stream << " auth-cookie=" + tmp_auth_cookie;
     }
 
-    config_tmp_file_stream << Qt::endl;
+    config_tmp_file_stream << X2GO_COMPAT_ENDL;
 
 #ifdef Q_OS_UNIX
-    config_tmp_file_stream << "load-module module-native-protocol-unix" << Qt::endl;
-    config_tmp_file_stream << "load-module module-esound-protocol-unix" << Qt::endl;
+    config_tmp_file_stream << "load-module module-native-protocol-unix" << X2GO_COMPAT_ENDL;
+    config_tmp_file_stream << "load-module module-esound-protocol-unix" << X2GO_COMPAT_ENDL;
 #endif // defined(Q_OS_UNIX)
 
     config_tmp_file_stream << "load-module module-esound-protocol-tcp port="
                            << QString::number (esd_port_)
-                           << Qt::endl;
+                           << X2GO_COMPAT_ENDL;
 
 #ifdef Q_OS_DARWIN
     config_tmp_file_stream << "load-module module-coreaudio-detect";
@@ -665,7 +666,7 @@ bool PulseManager::generate_server_config () {
     else {
       config_tmp_file_stream << "1";
     }
-    config_tmp_file_stream << Qt::endl;
+    config_tmp_file_stream << X2GO_COMPAT_ENDL;
 
     QFile config_file (config_file_name);
     if (QFile::exists (config_file_name))
@@ -690,13 +691,13 @@ bool PulseManager::generate_client_config () {
   if (client_config_tmp_file.open ()) {
     QTextStream config_tmp_file_stream (&client_config_tmp_file);
 
-    config_tmp_file_stream << "autospawn=no" << Qt::endl;
+    config_tmp_file_stream << "autospawn=no" << X2GO_COMPAT_ENDL;
 #ifdef Q_OS_WIN
-    config_tmp_file_stream << "default-server=localhost:" << pulse_port_ << Qt::endl;
+    config_tmp_file_stream << "default-server=localhost:" << pulse_port_ << X2GO_COMPAT_ENDL;
 #endif // defined (Q_OS_WIN)
     config_tmp_file_stream << "daemon-binary="
                            << QDir::toNativeSeparators (QDir (server_binary_).absolutePath ())
-                           << Qt::endl;
+                           << X2GO_COMPAT_ENDL;
 
     if (QFile::exists (client_config_file_name))
       QFile::remove (client_config_file_name);

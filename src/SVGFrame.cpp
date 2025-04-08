@@ -23,7 +23,7 @@
 #include "x2gologdebug.h"
 #include <QResizeEvent>
 
-
+#include "compat.h"
 
 SVGFrame::SVGFrame ( QString fname,bool st,QWidget* parent,
                      Qt::WindowFlags f ) :QFrame ( parent,f )
@@ -60,7 +60,7 @@ SVGFrame::SVGFrame ( QString fname,bool st,QWidget* parent,
 			if ( renderer->animated() )
 			{
 				timer->start ( 1000/renderer->framesPerSecond() );
-				x2goDebug<<"Animated, fps:"<<renderer->framesPerSecond() <<Qt::endl;
+				x2goDebug<<"Animated, fps:"<<renderer->framesPerSecond() <<X2GO_COMPAT_ENDL;
 			}
 		}
 	}
@@ -125,7 +125,7 @@ void SVGFrame::mousePressEvent ( QMouseEvent * event )
 			wapiGetBorders ( parentWidget->winId(), vBorder, hBorder, barHeight );
 		x2goDebug<<"svg frame: "<<event->pos() <<
 		":"<<mapFromGlobal ( event->pos() ) <<":"<<barHeight<<":"<<vBorder<<":"
-		<<hBorder<<":"<<pos() <<Qt::endl;
+		<<hBorder<<":"<<pos() <<X2GO_COMPAT_ENDL;
 		QMouseEvent * nevent=new QMouseEvent(event->type(), QPoint(0,0),
 				event->button(), event-> buttons(), event->modifiers());
 		QFrame::mousePressEvent ( nevent );

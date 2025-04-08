@@ -244,7 +244,7 @@ void HttpBrokerClient::slotSshServerAuthPassphrase(SshMasterConnection* connecti
                                                         ok = true;
                                                         break;
         default:
-                                                        x2goDebug << "Unknown passphrase type requested! Was: " << passphrase_type << Qt::endl;
+                                                        x2goDebug << "Unknown passphrase type requested! Was: " << passphrase_type << X2GO_COMPAT_ENDL;
                                                         ok = false;
                                                         break;
     }
@@ -540,7 +540,7 @@ void HttpBrokerClient::createIniFile(const QString& raw_content)
     QString content;
     content = raw_content;
     content.replace("<br>","\n");
-//     x2goDebug<<"Inifile content: "<<content<<Qt::endl;
+//     x2goDebug<<"Inifile content: "<<content<<X2GO_COMPAT_ENDL;
     QString cont;
     QStringList lines=content.split("START_USER_SESSIONS\n");
     if (lines.count()>1)
@@ -678,7 +678,7 @@ void HttpBrokerClient::slotConnectionTest(bool success, QString answer, int)
         return;
     if(!sshBroker)
     {
-        x2goDebug<<"Elapsed: "<<requestTime.elapsed()<<"; received:"<<answer.size()<<Qt::endl;
+        x2goDebug<<"Elapsed: "<<requestTime.elapsed()<<"; received:"<<answer.size()<<X2GO_COMPAT_ENDL;
         emit connectionTime(requestTime.elapsed(),answer.size());
     }
     return;
@@ -968,23 +968,23 @@ void HttpBrokerClient::slotSslErrors ( QNetworkReply* netReply, const QList<QSsl
 #else
                           cert.issuerInfo ( QSslCertificate::CommonName )
 #endif
-                          <<Qt::endl<<
+                          <<X2GO_COMPAT_ENDL<<
                           tr ( "Organization(O)\t" ) <<
 #if QT_VERSION >= 0x050000
                           cert.issuerInfo ( QSslCertificate::Organization ).join("; ")
 #else
                           cert.issuerInfo ( QSslCertificate::Organization )
 #endif
-                          <<Qt::endl<<
+                          <<X2GO_COMPAT_ENDL<<
                           tr ( "Organizational Unit(OU)\t" ) <<
 #if QT_VERSION >= 0x050000
                           cert.issuerInfo ( QSslCertificate::OrganizationalUnitName ).join("; ")
 #else
                           cert.issuerInfo ( QSslCertificate::OrganizationalUnitName )
 #endif
-                          <<Qt::endl<<
+                          <<X2GO_COMPAT_ENDL<<
                           tr ( "Serial Number\t" ) <<getHexVal ( cert.serialNumber() )
-                          <<Qt::endl<<Qt::endl<<
+                          <<X2GO_COMPAT_ENDL<<X2GO_COMPAT_ENDL<<
                           tr ( "Issued by:\n" ) <<
                           tr ( "Common Name(CN)\t" ) <<
 #if QT_VERSION >= 0x050000
@@ -992,28 +992,28 @@ void HttpBrokerClient::slotSslErrors ( QNetworkReply* netReply, const QList<QSsl
 #else
                           cert.subjectInfo ( QSslCertificate::CommonName )
 #endif
-                          <<Qt::endl<<
+                          <<X2GO_COMPAT_ENDL<<
                           tr ( "Organization(O)\t" ) <<
 #if QT_VERSION >= 0x050000
                           cert.subjectInfo ( QSslCertificate::Organization ).join("; ")
 #else
                           cert.subjectInfo ( QSslCertificate::Organization )
 #endif
-                          <<Qt::endl<<
+                          <<X2GO_COMPAT_ENDL<<
                           tr ( "Organizational Unit(OU)\t" ) <<
 #if QT_VERSION >= 0x050000
                           cert.subjectInfo ( QSslCertificate::OrganizationalUnitName ).join("; ")
 #else
                           cert.subjectInfo ( QSslCertificate::OrganizationalUnitName )
 #endif
-                          <<Qt::endl<<Qt::endl<<
+                          <<X2GO_COMPAT_ENDL<<X2GO_COMPAT_ENDL<<
 
                           tr ( "Validity:\n" ) <<
-                          tr ( "Issued on\t" ) <<cert.effectiveDate().toString() <<Qt::endl<<
-                          tr ( "expires on\t" ) <<cert.expiryDate().toString() <<Qt::endl<<Qt::endl<<
+                          tr ( "Issued on\t" ) <<cert.effectiveDate().toString() <<X2GO_COMPAT_ENDL<<
+                          tr ( "expires on\t" ) <<cert.expiryDate().toString() <<X2GO_COMPAT_ENDL<<X2GO_COMPAT_ENDL<<
                           tr ( "Fingerprints:\n" ) <<
                           tr ( "SHA1\t" ) <<
-                          getHexVal ( cert.digest ( QCryptographicHash::Sha1 ) ) <<Qt::endl<<
+                          getHexVal ( cert.digest ( QCryptographicHash::Sha1 ) ) <<X2GO_COMPAT_ENDL<<
                           tr ( "MD5\t" ) <<md5;
 
 

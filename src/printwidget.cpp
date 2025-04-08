@@ -27,6 +27,9 @@
 #ifdef Q_OS_WIN
 #include "wapi.h"
 #endif
+
+#include "compat.h"
+
 PrintWidget::PrintWidget ( QWidget* parent )
 		: QWidget ( parent )
 {
@@ -118,7 +121,7 @@ void PrintWidget::loadSettings()
 	bool isGsViewInstalled=gsViewInfo ( ver,gsvpath );
 	if ( prcmd=="" && ! ( isGsInstalled && isGsViewInstalled ) )
 	{
-// 		x2goDebug<<"fallback to view"<<Qt::endl;
+// 		x2goDebug<<"fallback to view"<<X2GO_COMPAT_ENDL;
 // 		pdfView=true;
 	}
 	else if ( prcmd=="" )

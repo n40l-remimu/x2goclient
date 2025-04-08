@@ -22,10 +22,12 @@
 #include "x2gologdebug.h"
 #include <QMessageBox>
 
+#include "compat.h"
+
 PrintDialog::PrintDialog ( QWidget* parent, Qt::WindowFlags f )
 		: QDialog ( parent,f )
 {
-	x2goDebug<<"Starting print dialog."<<Qt::endl;
+	x2goDebug<<"Starting print dialog."<<X2GO_COMPAT_ENDL;
 	ui.setupUi ( this );
 	ui.buttonBox->button ( QDialogButtonBox::Ok )->setText (
 	    tr ( "Print" ) );
@@ -44,7 +46,7 @@ PrintDialog::PrintDialog ( QWidget* parent, Qt::WindowFlags f )
 
 PrintDialog::~PrintDialog()
 {
-	x2goDebug<<"Closing print dialog."<<Qt::endl;
+	x2goDebug<<"Closing print dialog."<<X2GO_COMPAT_ENDL;
 }
 
 

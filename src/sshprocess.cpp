@@ -28,6 +28,8 @@
 #include <netinet/tcp.h>
 #endif
 
+#include "compat.h"
+
 // #undef DEBUG
 #define DEBUG
 
@@ -125,7 +127,7 @@ void SshProcess::tunnelLoop()
     if (serverSocket<=0)
     {
         QString err=tr("Error creating socket.");
-        x2goDebug<<err<<Qt::endl;
+        x2goDebug<<err<<X2GO_COMPAT_ENDL;
         emit sshFinished(false,err,pid);
         return;
     }
@@ -143,7 +145,7 @@ void SshProcess::tunnelLoop()
     if (bind(serverSocket,(struct sockaddr*) &address,sizeof(address))!=0)
     {
         QString err=tr("Error binding ")+localHost+":"+QString::number(localPort);
-        x2goDebug<<err<<Qt::endl;
+        x2goDebug<<err<<X2GO_COMPAT_ENDL;
         emit sshFinished(false,err,pid);
         return;
     }
@@ -292,7 +294,7 @@ void SshProcess::startNormal(const QString& cmd, bool overridePath)
         {
             stdErrString=proc->errorString();
 #ifdef DEBUG
-            //x2goDebug<<"ssh start failed:" <<stdErrString<<Qt::endl;
+            //x2goDebug<<"ssh start failed:" <<stdErrString<<X2GO_COMPAT_ENDL;
 #endif
             slotChannelClosed(this, uuidStr);
             return;
@@ -384,7 +386,7 @@ void SshProcess::start_cp(QString src, QString dst)
 void SshProcess::startTunnel(const QString& forwardHost, uint forwardPort, const QString& localHost,
                              uint localPort, bool reverse)
 {
-    x2goDebug<<"Starting tunnel via SshProcess object "<<pid<<": "<<forwardHost<<":"<<forwardPort<<" -> "<<localHost<<":"<<localPort<<Qt::endl;
+    x2goDebug<<"Starting tunnel via SshProcess object "<<pid<<": "<<forwardHost<<":"<<forwardPort<<" -> "<<localHost<<":"<<localPort<<X2GO_COMPAT_ENDL;
 
     tunnel=true;
     tunnelOkEmited=false;
@@ -439,7 +441,7 @@ void SshProcess::slotStdErr(SshProcess* creator, QByteArray data)
     if (creator!=this)
         return;
 #ifdef DEBUG
-//     x2goDebug<<"new err data:"<<data<<Qt::endl;
+//     x2goDebug<<"new err data:"<<data<<X2GO_COMPAT_ENDL;
 #endif
     stdErrString+=data;
 
@@ -464,7 +466,7 @@ void SshProcess::slotStdOut(SshProcess* creator, QByteArray data)
 {
     if (creator!=this)
         return;
-//     x2goDebug<<"new data"<<data<<Qt::endl;
+//     x2goDebug<<"new data"<<data<<X2GO_COMPAT_ENDL;
     stdOutString+=data;
 }
 

@@ -124,6 +124,9 @@ x2goclient (4.1.2.4-0x2go1) UNRELEASED; urgency=medium
       macro trickery.
     - src/compat.h: revert back to pure preprocessor macros.
     - src/compat.h: add X2GO_COMPAT_ENDL compat macro.
+    - src/{SVGFrame,contest,cupsprint,help,httpbrokerclient,onmainwindow,
+           print{dialog,widget},pulsemanager,ssh{masterconnection,process},
+           wapi}.cpp: use X2GO_COMPAT_ENDL compat macro.
   * x2goclient.spec:
     + Add Recommends: x2gokdriveclient for FC30+, RH 8+, *SuSE 15.4+.
     + Fix typo leading to FTBFS in Fedora macro.

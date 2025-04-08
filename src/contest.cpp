@@ -21,6 +21,8 @@
 #include "httpbrokerclient.h"
 #include <QPushButton>
 
+#include "compat.h"
+
 ConTest::ConTest(HttpBrokerClient* broker, QUrl url, QWidget* parent, Qt::WindowFlags f): QDialog(parent, f)
 {
     socket=0l;
@@ -149,7 +151,7 @@ void ConTest::slotError(QAbstractSocket::SocketError socketError)
     else
         error=socket->errorString();
 
-    x2goDebug<<"Error: "<<error<<Qt::endl;
+    x2goDebug<<"Error: "<<error<<X2GO_COMPAT_ENDL;
     timer->stop();
     QPalette pal=lhttps->palette();
     pal.setColor(QPalette::WindowText, Qt::red);

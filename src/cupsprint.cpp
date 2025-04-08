@@ -20,6 +20,9 @@
 #include "x2gologdebug.h"
 #include "x2gosettings.h"
 #include <QDir>
+
+#include "compat.h"
+
 CUPSPrint::CUPSPrint()
 {
 	ppd=0l;
@@ -130,7 +133,7 @@ bool CUPSPrint::setCurrentPrinter ( QString prn )
 	if ( ppdConflicts ( ppd ) !=0 )
 	{
 		x2goDebug<<"There are conflicting options in user settings,\n"
-		"loading defaults"<<Qt::endl;
+		"loading defaults"<<X2GO_COMPAT_ENDL;
 		setDefaults();
 	}
 	return true;
@@ -153,7 +156,7 @@ bool CUPSPrint::getOptionValue ( const QString& option,
 	}
 	value=QString::fromLocal8Bit ( choice->choice );
 	valueText=QString::fromLocal8Bit ( choice->text );
-// 	x2goDebug<<"getValue:"<<value<<Qt::endl;
+// 	x2goDebug<<"getValue:"<<value<<X2GO_COMPAT_ENDL;
 	return true;
 }
 
