@@ -1903,6 +1903,27 @@ void SshMasterConnection::channelLoop()
         disconnectFlagMutex.lock();
         bool disconnect=disconnectSessionFlag;
         disconnectFlagMutex.unlock();
+        int stat=ssh_get_status(my_ssh_session);
+        if(stat&SSH_CLOSED_ERROR || stat &SSH_CLOSED)
+        {
+            QString errMsg=ssh_get_disconnect_message(my_ssh_session);
+            if(errMsg.isEmpty())
+            {
+                errMsg=tr("SSH session closed, check your network connection");
+            }
+            if(stat&SSH_CLOSED_ERROR)
+            {
+                //throw message to the client!
+                x2goDebug<<"SSH session closed with error: "<<errMsg<<X2GO_COMPAT_ENDL;
+            }
+            else
+            {
+                x2goDebug<<"SSH session closed "<<errMsg<<X2GO_COMPAT_ENDL;
+            }
+            emit sessionDisconnected((stat&SSH_CLOSED_ERROR), errMsg);
+            disconnect=true;
+        }
+
 
         if ( disconnect )
         {
@@ -1971,14 +1992,30 @@ void SshMasterConnection::channelLoop()
         for ( int i=0; i<channelConnections.size(); ++i )
         {
             // Try to make a channel connection
-            // TODO: Mabye a retry?
             bool res = createChannelConnection (i, maxsock, rfds, read_chan);
             if (!(res)) {
                 x2goDebug << "Connection to channel went wrong.";
-                continue;
+                //something is wrong here, let's check the state of ssh connection
+                stat=ssh_get_status(my_ssh_session);
+                if(stat&SSH_CLOSED_ERROR || stat &SSH_CLOSED)
+                {
+                    break;
+                }
+                else
+                {
+                    continue;
+                }
             }
         }
         channelConnectionsMutex.unlock();
+        //let's check if the connection state haven't changed
+        if(stat&SSH_CLOSED_ERROR || stat &SSH_CLOSED)
+        {
+            x2goDebug<<"Session disconnected, aborting loop"<<X2GO_COMPAT_ENDL;
+            delete [] read_chan;
+            delete [] out_chan;
+            continue;
+        }
         retval=ssh_select ( read_chan,out_chan,maxsock+1,&rfds,&tv );
         delete [] read_chan;
         delete [] out_chan;
@@ -2124,7 +2161,6 @@ bool SshMasterConnection::createChannelConnection (int i, int &maxsock, fd_set &
             return (false);
         }
         x2goDebug<<"New channel:"<<channel<<X2GO_COMPAT_ENDL;
-        channelConnections[i].channel=channel;
         if ( tcpSocket>0 )
         {
             x2goDebug << "Forwarding parameters: from remote (" << channelConnections.at (i).forwardHost << ":"
@@ -2223,7 +2259,6 @@ bool SshMasterConnection::createChannelConnection (int i, int &maxsock, fd_set &
 
                 emit ioErr ( channelConnections[i].creator, errorMsg, err );
                 x2goDebug<<errorMsg.left (errorMsg.size () - 1)<<": "<<err<<X2GO_COMPAT_ENDL;
-
                 return (false);
             }
             else
@@ -2232,6 +2267,7 @@ bool SshMasterConnection::createChannelConnection (int i, int &maxsock, fd_set &
                 x2goDebug<<"New exec channel created."<<X2GO_COMPAT_ENDL;
             }
         }
+        channelConnections[i].channel=channel;
     }
 
     read_chan[i]=channelConnections.at ( i ).channel;

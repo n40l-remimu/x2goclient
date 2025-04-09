@@ -234,6 +234,7 @@ signals:
     void serverAuthError(int errCode, QString lastSessionError, SshMasterConnection*);
     void serverAuthAborted();
     void userAuthError(QString error);
+    void sessionDisconnected(bool with_error, QString msg);
 
     void connectionOk( QString host);
 

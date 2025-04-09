@@ -3053,6 +3053,8 @@ SshMasterConnection* ONMainWindow::startSshConnection ( QString host, QString po
     connect ( con, SIGNAL ( userAuthError ( QString ) ),this,SLOT ( slotSshUserAuthError ( QString ) ) );
     connect ( con, SIGNAL ( connectionError ( QString,QString ) ), this,
               SLOT ( slotSshConnectionError ( QString,QString ) ) );
+    connect ( con, SIGNAL ( sessionDisconnected ( bool, QString ) ), this,
+              SLOT ( slotSshConnectionDisconnect (bool, QString ) ) );
     connect ( con, SIGNAL(startInteraction(SshMasterConnection*,QString)),this,
                SLOT(slotSshInteractionStart(SshMasterConnection*,QString)) );
     connect ( con, SIGNAL(updateInteraction(SshMasterConnection*,QString)),this,
@@ -3063,6 +3065,34 @@ SshMasterConnection* ONMainWindow::startSshConnection ( QString host, QString po
     con->start();
     return con;
 }
+
+
+void ONMainWindow::slotSshConnectionDisconnect ( bool withError, QString disconnectMessage )
+{
+    QString message=tr("SSH session disconnected");
+    if(withError)
+    {
+        x2goErrorf(2)<< message  +": " +disconnectMessage;
+    }
+    else
+    {
+        x2goDebug<<message +": "+ disconnectMessage;
+    }
+    if ( sshConnection )
+    {
+        delete sshConnection;
+        sshConnection=0l;
+    }
+    if(nxproxy)
+    {
+        slotProxyFinished ( -1,QProcess::CrashExit );
+    }
+    QMessageBox::critical ( 0l,message,disconnectMessage,
+                            QMessageBox::Ok,
+                            QMessageBox::NoButton );
+}
+
+
 
 void ONMainWindow::slotSshConnectionError ( QString message, QString lastSessionError )
 {
@@ -3560,15 +3590,40 @@ void ONMainWindow::continueNormalSession()
         return;
     }
     if ( !shadowSession )
-        sshConnection->executeCommand ( "x2golistsessions", this,SLOT ( slotListSessions ( bool, QString,int )));
+    {
+        if(sshConnection)
+        {
+            sshConnection->executeCommand ( "x2golistsessions", this,SLOT ( slotListSessions ( bool, QString,int )));
+        }
+        else
+        {
+            x2goDebug<<"Not using terminated SSH session!";
+        }
+    }
     else
-        sshConnection->executeCommand ( "x2golistdesktops", this,SLOT ( slotListSessions ( bool, QString,int )));
+    {
+        if(sshConnection)
+        {
+            sshConnection->executeCommand ( "x2golistdesktops", this,SLOT ( slotListSessions ( bool, QString,int )));
+        }
+        else
+        {
+            x2goDebug<<"Not using terminated SSH session!";
+        }
+    }
 
 }
 
 void ONMainWindow::continueLDAPSession()
 {
-    sshConnection->executeCommand ( "x2gogetservers", this, SLOT ( slotGetServers ( bool, QString,int ) ));
+    if(sshConnection)
+    {
+        sshConnection->executeCommand ( "x2gogetservers", this, SLOT ( slotGetServers ( bool, QString,int ) ));
+    }
+    else
+    {
+        x2goDebug<<"Not using terminated SSH session!";
+    }
 }
 
 #ifdef Q_OS_LINUX
@@ -3949,7 +4004,10 @@ bool ONMainWindow::startSession ( const QString& sid, CONTYPE conType )
         sshPort=config.sshport;
     }
     if (sshConnection)
+    {
         delete sshConnection;
+        sshConnection=0;
+    }
 
     if(currentKey.length()<=0)
     {
@@ -4053,10 +4111,10 @@ bool ONMainWindow::startSession ( const QString& sid, CONTYPE conType )
     }
 
     delete st;
-
     sshConnection=startSshConnection ( host,sshPort,acceptRsa,user,passwd,autologin, krblogin, false, useproxy,proxyType,proxyserver,
-                                       proxyport, proxylogin, proxypassword, proxyKey,proxyAutologin, proxyKrbLogin);
+                                        proxyport, proxylogin, proxypassword, proxyKey,proxyAutologin, proxyKrbLogin);
     sshConnection->set_kerberosDelegation(krbDelegation);
+
     return true;
 }
 
@@ -4757,8 +4815,16 @@ void ONMainWindow::startNewSession()
         return;
     }
 
-    sshConnection->executeCommand ( cmd, this, SLOT ( slotRetResumeSess ( bool,
+    if(sshConnection)
+    {
+        sshConnection->executeCommand ( cmd, this, SLOT ( slotRetResumeSess ( bool,
                                     QString,int ) ) );
+    }
+    else
+    {
+        x2goDebug<<"Not using terminated SSH session!";
+    }
+
     passForm->hide();
 }
 
@@ -5043,8 +5109,16 @@ void ONMainWindow::resumeSession ( const x2goSession& s )
 
     cmd += " " + xinerama_opt;
 
-    sshConnection->executeCommand ( cmd, this,  SLOT ( slotRetResumeSess ( bool, QString,
+    if(sshConnection)
+    {
+        sshConnection->executeCommand ( cmd, this,  SLOT ( slotRetResumeSess ( bool, QString,
                                     int ) ));
+    }
+    else
+    {
+        x2goDebug<<"Not using terminated SSH session!";
+    }
+
     resumingSession=s;
     passForm->hide();
 }
@@ -5480,6 +5554,10 @@ void ONMainWindow::slotSuspendSess()
 void ONMainWindow::slotSuspendSessFromSt()
 {
 
+    if(!proxyRunning)
+    {
+        return;
+    }
     if(brokerMode)
     {
         sendEventToBroker(SUSPENDING);
@@ -5508,6 +5586,10 @@ void ONMainWindow::slotSuspendSessFromSt()
 
 void ONMainWindow::slotTermSessFromSt()
 {
+    if(!proxyRunning)
+    {
+        return;
+    }
 #ifdef Q_OS_LINUX
     if (directRDP)
     {
@@ -5978,9 +6060,17 @@ void ONMainWindow::slotRetResumeSess ( bool result,
         ++iport;
     localGraphicPort=QString::number ( iport );
 
-    sshConnection->startTunnel ( "localhost",resumingSession.grPort.toInt(),"localhost",
-                                 localGraphicPort.toInt(), false, this,  SLOT ( slotTunnelOk(int) ), SLOT ( slotTunnelFailed ( bool,
-                                         QString,int ) ) );
+    if(sshConnection)
+    {
+        sshConnection->startTunnel ( "localhost",resumingSession.grPort.toInt(),"localhost",
+                                    localGraphicPort.toInt(), false, this,  SLOT ( slotTunnelOk(int) ), SLOT ( slotTunnelFailed ( bool,
+                                    QString,int ) ) );
+    }
+    else
+    {
+        x2goDebug<<"Not using terminated SSH session!";
+    }
+
     if ( shadowSession )
         return;
 
@@ -6025,7 +6115,15 @@ void ONMainWindow::slotRetResumeSess ( bool result,
                      resumingSession.sessionId +
                      "/.pulse-client.conf\"";
 
-            sshConnection->executeCommand (scmd);
+            if(sshConnection)
+            {
+                sshConnection->executeCommand (scmd);
+            }
+            else
+            {
+                x2goDebug<<"Not using terminated SSH session!";
+            }
+
 
             bool sysPulse=false;
 #ifdef Q_OS_LINUX
@@ -6073,11 +6171,18 @@ void ONMainWindow::slotRetResumeSess ( bool result,
                 }
                 if ( pulsecookie_filename.length() > 0 )
                 {
-                    sshConnection->copyFile(
-                        pulsecookie_filename,
-                        "$HOME/.x2go/C-"+
-                        resumingSession.sessionId+
-                        "/.pulse-cookie", this, SLOT ( slotPCookieReady ( bool, QString,int )));
+                    if(sshConnection)
+                    {
+                        sshConnection->copyFile(
+                            pulsecookie_filename,
+                            "$HOME/.x2go/C-"+
+                            resumingSession.sessionId+
+                            "/.pulse-cookie", this, SLOT ( slotPCookieReady ( bool, QString,int )));
+                    }
+                    else
+                    {
+                        x2goDebug<<"Not using terminated SSH session!";
+                    }
                 }
             }
             else
@@ -6091,10 +6196,17 @@ void ONMainWindow::slotRetResumeSess ( bool result,
                 }
                 if ( pulsecookie_filename.length() > 0 )
                 {
-                    sshConnection->copyFile(pulsecookie_filename,
+                    if(sshConnection)
+                    {
+                        sshConnection->copyFile(pulsecookie_filename,
                                             "$HOME/.x2go/C-"+
                                             resumingSession.sessionId+
                                             "/.pulse-cookie", this, SLOT ( slotPCookieReady ( bool, QString,int )));
+                    }
+                    else
+                    {
+                        x2goDebug<<"Not using terminated SSH session!";
+                    }
                 }
 #else /* !defined (Q_OS_WIN) && !defined (Q_OS_DARWIN) */
                 QString cooFile = QDir::toNativeSeparators (QDir (pulseManager->get_pulse_dir ().absolutePath () +
@@ -6102,22 +6214,46 @@ void ONMainWindow::slotRetResumeSess ( bool result,
                 QString destFile="$HOME/.x2go/C-"+
                                  resumingSession.sessionId+
                                  "/.pulse-cookie";
-                sshConnection->copyFile(cooFile,
+                if(sshConnection)
+                {
+                    sshConnection->copyFile(cooFile,
                                         destFile, this, SLOT ( slotPCookieReady ( bool, QString,int )));
+                }
+                else
+                {
+                    x2goDebug<<"Not using terminated SSH session!";
+                }
+
 #endif /* !defined (Q_OS_WIN) && !defined (Q_OS_DARWIN) */
             }
         }
         if ( sndSystem==ESD )
         {
 #if !defined (Q_OS_WIN) && !defined (Q_OS_DARWIN)
-            sshConnection->copyFile(homeDir+"/.esd_auth",
+            if(sshConnection)
+            {
+                sshConnection->copyFile(homeDir+"/.esd_auth",
                                     "$HOME/.esd_auth" );
+            }
+            else
+            {
+                x2goDebug<<"Not using terminated SSH session!";
+            }
+
 #else /* !defined (Q_OS_WIN) && !defined (Q_OS_DARWIN) */
             QString cooFile = QDir::toNativeSeparators (QDir (pulseManager->get_pulse_dir ().absolutePath () +
                                                               "/.esd_auth").absolutePath ());
             QString destFile="$HOME/.esd_auth";
-            sshConnection->copyFile(cooFile,
+            if(sshConnection)
+            {
+                sshConnection->copyFile(cooFile,
                                     destFile );
+            }
+            else
+            {
+                x2goDebug<<"Not using terminated SSH session!";
+            }
+
 #endif /* defined (Q_OS_LINUX) */
         }
 /* Windows and Darwin are covered by PulseManager. */
@@ -6139,13 +6275,20 @@ void ONMainWindow::slotRetResumeSess ( bool result,
 #endif /* !defined (Q_OS_WIN) && !defined (Q_OS_DARWIN) */
         if ( sshSndTunnel )
         {
-            sndTunnel=sshConnection->startTunnel (
+            if(sshConnection)
+            {
+                sndTunnel=sshConnection->startTunnel (
                           "localhost",
                           resumingSession.sndPort.toInt(),"127.0.0.1",
                           sndPort.toInt(),true,this,NULL, SLOT (
                               slotSndTunnelFailed ( bool,
                                                     QString,
                                                     int ) ));
+            }
+            else
+            {
+                x2goDebug<<"Not using terminated SSH session!";
+            }
         }
     }
 }
@@ -6641,7 +6784,14 @@ void ONMainWindow::slotSetModMap()
     else {
         /* Send modified map to server. */
         QString cmd = "export DISPLAY=\":" + resumingSession.display + "\"; echo \"" + kbMap + "\" | xmodmap -";
-        sshConnection->executeCommand (cmd);
+        if(sshConnection)
+        {
+            sshConnection->executeCommand (cmd);
+        }
+        else
+        {
+            x2goDebug<<"Not using terminated SSH session!";
+        }
     }
 }
 
@@ -6855,10 +7005,13 @@ void ONMainWindow::slotProxyFinished ( int,QProcess::ExitStatus )
     }
     else
     {
-        x2goDebug<<"Deleting SSH connection instance.";
-        delete sshConnection;
-        x2goDebug<<"Deleted SSH connection instance." ;
-        sshConnection=0;
+        if(sshConnection)
+        {
+            x2goDebug<<"Deleting SSH connection instance.";
+            delete sshConnection;
+            x2goDebug<<"Deleted SSH connection instance." ;
+            sshConnection=0;
+        }
         if (startHidden)
         {
             x2goInfof(9) << tr("Closing X2Go Client because it was started in hidden mode.");
@@ -6886,6 +7039,10 @@ void ONMainWindow::slotProxyFinished ( int,QProcess::ExitStatus )
         if ( brokerMode && (!config.brokerAutologoff) )
         {
             x2goDebug<<"Re-reading user's session profiles from broker.";
+            if(config.brokerSyncTimeout && !(brokerSyncTimer->isActive()))
+            {
+                brokerSyncTimer->start();
+            }
             QTimer::singleShot ( 2000,broker,
                                  SLOT ( getUserSessions() ) );
         }
@@ -7211,13 +7368,24 @@ void ONMainWindow::termBrokerSession(const QString& sessId, const QString& host)
 void ONMainWindow::suspendSession ( QString sessId )
 {
 
-    sshConnection->executeCommand ( "x2gosuspend-session "+sessId, this,  SLOT ( slotRetSuspSess ( bool,  QString,
-                                    int ) ) );
+    if(sshConnection)
+    {
+        sshConnection->executeCommand ( "x2gosuspend-session "+sessId, this,  SLOT ( slotRetSuspSess ( bool,  QString,
+                                        int ) ) );
+    }
+    else
+    {
+        x2goDebug<<"Not using terminated SSH session!";
+    }
 }
 
 
 bool ONMainWindow::termSession ( QString sessId, bool warn )
 {
+    if(!proxyRunning)
+    {//already terminated
+        return false;
+    }
     if ( warn )
     {
         bool hide_after=false;
@@ -7250,8 +7418,15 @@ bool ONMainWindow::termSession ( QString sessId, bool warn )
         return true;
     }
     x2goDebug<<"Terminating session.";
-    sshConnection->executeCommand ( "x2goterminate-session "+sessId, this, SLOT ( slotRetTermSess ( bool,
-                                    QString,int) )  );
+    if(sshConnection)
+    {
+        sshConnection->executeCommand ( "x2goterminate-session "+sessId, this, SLOT ( slotRetTermSess ( bool,
+                                        QString,int) )  );
+    }
+    else
+    {
+        x2goDebug<<"Not using terminated SSH session!";
+    }
     proxyRunning=false;
     return true;
 }
@@ -7454,10 +7629,17 @@ void ONMainWindow::runCommand()
          * session.
          * Fixes: #1100
          */
-        sshConnection->executeCommand ( "x2gobasepath", this,
-                                        SLOT ( SlotRunCommand ( bool,
-                                        QString,
-                                        int )), true);
+        if(sshConnection)
+        {
+            sshConnection->executeCommand ( "x2gobasepath", this,
+                                            SLOT ( SlotRunCommand ( bool,
+                                            QString,
+                                            int )), true);
+        }
+        else
+        {
+            x2goDebug<<"Not using terminated SSH session!";
+        }
     }
 }
 
@@ -7469,7 +7651,14 @@ void ONMainWindow::runApplication(QString exec)
                 + resumingSession.display
                 + " setsid " + exec + " 1> /dev/null 2>/dev/null & exit";
 
-    sshConnection->executeCommand (cmd, 0, 0, false);
+    if(sshConnection)
+    {
+        sshConnection->executeCommand (cmd, 0, 0, false);
+    }
+    else
+    {
+        x2goDebug<<"Not using terminated SSH session!";
+    }
 }
 
 void ONMainWindow::SlotRunCommand(bool, QString output, int)
@@ -7624,7 +7813,11 @@ void ONMainWindow::SlotRunCommand(bool, QString output, int)
 
     command.replace ( " ","X2GO_SPACE_CHAR" );
     QString krbFwString;
-
+    if(!sshConnection)
+    {
+        x2goDebug<<"Not using terminated SSH session!";
+        return;
+    }
     if(sshConnection->useKerberos() && sshConnection->get_kerberosDelegation())
     {
         krbFwString="KRB5CCNAME=`echo $KRB5CCNAME |sed 's/FILE://g'` \
@@ -7673,10 +7866,17 @@ void ONMainWindow::SlotRunCommand(bool, QString output, int)
         }
     }
 
-    sshConnection->executeCommand ( cmd, this,
+    if(sshConnection)
+    {
+        sshConnection->executeCommand ( cmd, this,
                                     SLOT ( slotRetRunCommand ( bool,
                                     QString,
                                     int )), false);
+    }
+    else
+    {
+        x2goDebug<<"Not using terminated SSH session!";
+    }
 }
 
 void ONMainWindow::slotRetRunCommand ( bool result, QString output,
@@ -7703,6 +7903,12 @@ void ONMainWindow::slotRetRunCommand ( bool result, QString output,
 
 void ONMainWindow::readApplications()
 {
+    if(!sshConnection)
+    {
+        x2goDebug<<"Not using terminated SSH session!";
+        return;
+    }
+
     sshConnection->executeCommand ( "x2gogetapps", this,  SLOT ( slotReadApplications ( bool,
                                     QString,
                                     int) ));
@@ -9014,6 +9220,11 @@ void ONMainWindow::exportDirs ( QString exports,bool removable )
     dr.isRemovable=removable;
     exportDir.append ( dr );
     QString keyFile=dr.key;
+    if(!sshConnection)
+    {
+        x2goDebug<<"Not using terminated SSH session!";
+        return;
+    }
     sshConnection->copyFile ( keyFile,dst, this,  SLOT ( slotCopyKey ( bool, QString,int ) ));
 
 }
@@ -9157,6 +9368,12 @@ void ONMainWindow::exportDefaultDirs()
 
 void ONMainWindow::slotCopyKey ( bool result, QString output, int pid)
 {
+    if(!sshConnection)
+    {
+        x2goDebug<<"Not using terminated SSH session!";
+        return;
+    }
+
     fsExportKey=sshConnection->getSourceFile(pid);
 
     x2goDebug<<"Exported key: "<<fsExportKey;
@@ -9443,6 +9660,12 @@ void ONMainWindow::slotExportTimer()
     QString user=getCurrentUname();
     QString host=resumingSession.server;
     QString sessionId=resumingSession.sessionId;
+
+    if(!sshConnection)
+    {
+        x2goDebug<<"Not using terminated SSH session!";
+        return;
+    }
 
     for ( int i=0; i<args.size(); ++i )
     {
@@ -10204,6 +10427,11 @@ void ONMainWindow::check_cmd_status()
     QString host=resumingSession.server;
     passwd=getCurrentPass();
 
+    if(!sshConnection)
+    {
+        x2goDebug<<"Not using terminated SSH session!";
+        return;
+    }
     sshConnection->executeCommand ( "x2gocmdexitmessage "+
                                     resumingSession.sessionId , this, SLOT(slotCmdMessage(bool, QString, int)));
 }
@@ -10285,6 +10513,11 @@ int ONMainWindow::startSshFsTunnel()
     QString passwd=getCurrentPass();
     QString uname=getCurrentUname();
 
+    if(!sshConnection)
+    {
+        x2goDebug<<"Not using terminated SSH session!";
+        return 0;
+    }
     fsTunnel=sshConnection->startTunnel ( "localhost",resumingSession.fsPort.toUInt(),"127.0.0.1",
                                           clientSshPort.toInt(), true, this, SLOT ( slotFsTunnelOk(int)), SLOT ( slotFsTunnelFailed ( bool,
                                                   QString,int ) ) );
@@ -10509,8 +10742,15 @@ void ONMainWindow::startX2goMount()
     }
 
     x2goDebug<<"Calling startX2goMount command."<<X2GO_COMPAT_ENDL;
-    dir->pid=sshConnection->executeCommand(cmd,this,SLOT ( slotRetExportDir ( bool,
+    if(sshConnection)
+    {
+        dir->pid=sshConnection->executeCommand(cmd,this,SLOT ( slotRetExportDir ( bool,
                                            QString,int) ));
+    }
+    else
+    {
+        x2goDebug<<"Not using terminated SSH session!";
+    }
 }
 
 void ONMainWindow::slotCheckPrintSpool()
@@ -11842,6 +12082,11 @@ void ONMainWindow::slotSetProxyWinFullscreen()
     QString geoStr = QString("%1").arg(geom.width()) + "x"+ QString("%1").arg(geom.height());
 
 
+    if(!sshConnection)
+    {
+        x2goDebug<<"Not using terminated SSH session!";
+        return;
+    }
 
     sshConnection->executeCommand("DISPLAY=:"+resumingSession.display+" xrandr --output default --mode "+geoStr);
 #endif
@@ -11954,7 +12199,14 @@ void ONMainWindow::slotConfigXinerama()
         QString cmd="export DISPLAY=:"+resumingSession.display+" ;printf %b '\\''"+screens.join("\\n")+"'\\'' >  $HOME/.x2go/C-"+
                     resumingSession.sessionId+"/xinerama.conf";
 
-        sshConnection->executeCommand(cmd, this, SLOT(slotXineramaConfigured()));
+        if(sshConnection)
+        {
+            sshConnection->executeCommand(cmd, this, SLOT(slotXineramaConfigured()));
+        }
+        else
+        {
+            x2goDebug<<"Not using terminated SSH session!";
+        }
     }
 }
 
