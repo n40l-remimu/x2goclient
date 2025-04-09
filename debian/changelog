@@ -9,6 +9,16 @@ x2goclient (4.1.2.4-0x2go1) UNRELEASED; urgency=medium
     - Fix crashes in broker mode when server key check has failed.
     - Fix spawning terminals for SSHD on Windows, when default terminal other
       than Windows Console Host.
+    - Check for the ssh connection state from the main loop of the
+      sshmasterconnection thread. Terminate connection if ssh session was
+      disconnected. This should prevent crashes if the SSH connection is
+      terminated unexpectedly.
+    - Check session state if creating a new channel failed.
+    - Check the bitmask in ssh_get_status, restart broker timer after proxy
+      is finished and don't assign channelConnection.channel if the channel
+      creation has failed.
+    - Display better understandable message if SSH disconnected.
+    - Shorter msgbox title if SSH disconnected.
 
   [ Mihai Moldovan ]
   * New upstream version (4.1.2.4):
