@@ -23,21 +23,15 @@
 #include <QDir>
 #include <QProcessEnvironment>
 
-X2goSettings::X2goSettings(QString fileContent, QSettings::Format format)
+X2goSettings::X2goSettings(const QTemporaryFile& settingsFile, QSettings::Format format)
 {
-    cfgFile=new QTemporaryFile();
-    cfgFile->open();
-    QTextStream out(cfgFile);
-    out<<fileContent;
-    cfgFile->close();
-    set=new QSettings ( cfgFile->fileName(),
+    set=new QSettings ( settingsFile.fileName(),
                         format );
 }
 
 
 X2goSettings::X2goSettings ( QString group )
 {
-    cfgFile=0l;
     if (group=="sessions" && ONMainWindow::getSessionConf().length()>0)
     {
         set=new QSettings ( ONMainWindow::getSessionConf(),
@@ -102,8 +96,6 @@ X2goSettings::X2goSettings ( QString group )
 X2goSettings::~X2goSettings()
 {
     delete set;
-    if (cfgFile)
-        delete cfgFile;
 }
 
 bool X2goSettings::centralSettings()
