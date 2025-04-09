@@ -19,6 +19,8 @@ x2goclient (4.1.2.4-0x2go1) UNRELEASED; urgency=medium
       creation has failed.
     - Display better understandable message if SSH disconnected.
     - Shorter msgbox title if SSH disconnected.
+    - Reduce creation of temporary files in broker mode.
+    - Set temporary file's size to 0 before writing.
 
   [ Mihai Moldovan ]
   * New upstream version (4.1.2.4):
