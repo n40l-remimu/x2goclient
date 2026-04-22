@@ -279,10 +279,10 @@ win32|win32-* {
 }
 QT += svg network
 linux|linux-* {
-  greaterThan(QT_MAJOR_VERSION, 4): QT += x11extras
+  equals(QT_MAJOR_VERSION, 5): QT += x11extras
 }
 win32|win32-* {
-  greaterThan(QT_MAJOR_VERSION, 4): QT += winextras
+  equals(QT_MAJOR_VERSION, 5): QT += winextras
 }
 QT += widgets
 
