@@ -28,7 +28,7 @@ class PrintDialog : public QDialog
 {
 		Q_OBJECT
 	public:
-		PrintDialog ( QWidget* par=0, Qt::WindowFlags f = 0 );
+		PrintDialog ( QWidget* par=0, Qt::WindowFlags f = Qt::Widget );
 		~PrintDialog();
 	private:
 		Ui::PrintDialog ui;

@@ -34,7 +34,7 @@ class CUPSPrinterSettingsDialog : public QDialog
 		CUPSPrinterSettingsDialog ( QString prnName,
 		                            CUPSPrint*  cupsObject,
 		                            QWidget * parent=0l,
-		                            Qt::WindowFlags flags =0 );
+		                            Qt::WindowFlags flags =Qt::Widget );
 		~CUPSPrinterSettingsDialog();
 	private:
 		CUPSPrint* m_cups;

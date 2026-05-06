@@ -49,7 +49,7 @@ class EditConnectionDialog : public QDialog
     Q_OBJECT
 public:
     EditConnectionDialog ( bool newSession, QString id, QWidget * par,  int ind=0,
-                           Qt::WindowFlags f = 0 );
+                           Qt::WindowFlags f = Qt::Widget );
     ~EditConnectionDialog();
 private:
     QTabWidget *fr;

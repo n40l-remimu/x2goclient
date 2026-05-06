@@ -35,7 +35,7 @@ class ConnectionWidget : public ConfigWidget
 		Q_OBJECT
 	public:
 		ConnectionWidget ( QString id, ONMainWindow * mw,
-		                   QWidget * parent=0, Qt::WindowFlags f=0 );
+		                   QWidget * parent=0, Qt::WindowFlags f=Qt::Widget );
 
 		~ConnectionWidget();
 		void setDefaults();

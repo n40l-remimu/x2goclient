@@ -36,7 +36,7 @@ class SessionManageDialog : public QDialog
 public:
     SessionManageDialog ( QWidget * parent,
                           bool onlyCreateIcon=false,
-                          Qt::WindowFlags f=0 );
+                          Qt::WindowFlags f=Qt::Widget );
     ~SessionManageDialog();
     void loadSessions();
 private:
