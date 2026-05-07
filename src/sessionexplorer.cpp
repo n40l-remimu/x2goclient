@@ -35,6 +35,7 @@
 #include <QDir>
 #include <QPushButton>
 #include "compat.h"
+#include <QStandardPaths>
 
 SessionExplorer::SessionExplorer(ONMainWindow* p):QObject(p)
 {

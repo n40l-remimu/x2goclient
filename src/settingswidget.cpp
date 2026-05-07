@@ -29,6 +29,7 @@
 #include <QDir>
 #include <QApplication>
 #include <QTimer>
+#include <QScreen>
 #include <QSplashScreen>
 #include "x2gologdebug.h"
 #include <QGridLayout>

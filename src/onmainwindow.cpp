@@ -16,6 +16,10 @@
 ***************************************************************************/
 
 #include "onmainwindow_privat.h"
+#include <QWindow>
+#include <QRandomGenerator>
+#include <QStandardPaths>
+#include <QRegularExpression>
 #include "help.h"
 #include "compat.h"
 
