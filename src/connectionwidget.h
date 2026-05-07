@@ -26,7 +26,6 @@
 class QPushButton;
 class QLabel;
 class QSlider;
-class QStringList;
 class ONMainWindow;
 class QComboBox;
 class QSpinBox;
