@@ -284,6 +284,7 @@ linux|linux-* {
 win32|win32-* {
   greaterThan(QT_MAJOR_VERSION, 4): QT += winextras
 }
+QT += widgets
 
 mxe:QMAKE_CXXFLAGS += -std=c++11 -Wno-deprecated-declarations
 QMAKE_CXXFLAGS_DEBUG -= -g
