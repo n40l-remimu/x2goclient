@@ -153,7 +153,7 @@
 #ifdef Q_OS_LINUX
 #if QT_VERSION < 0x050000
 #include <QX11Info>
-#else
+#elif QT_VERSION < 0x060000
 #include <QtX11Extras/QX11Info>
 #endif
 #include <X11/Xlib.h>
