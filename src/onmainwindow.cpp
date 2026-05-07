@@ -2216,7 +2216,7 @@ void ONMainWindow::readUsers()
         }
         userList.append ( u );
     }
-    qSort ( userList.begin(),userList.end(),user::lessThen );
+    std::sort ( userList.begin(),userList.end(),user::lessThen );
     delete ld;
     ld=0;
     displayUsers();
@@ -8059,7 +8059,7 @@ void ONMainWindow::slotReadApplications(bool result, QString output,
         }
     }
 
-    qSort(applications.begin(), applications.end(),Application::lessThen);
+    std::sort(applications.begin(), applications.end(),Application::lessThen);
     plugAppsInTray();
     if (runStartApp && autostartApps.length()>0)
     {
@@ -9001,7 +9001,7 @@ void ONMainWindow::slotGetServers ( bool result, QString output,
         }
     }
 
-    qSort ( x2goServers.begin(),x2goServers.end(),serv::lt );
+    std::sort ( x2goServers.begin(),x2goServers.end(),serv::lt );
 
     listedSessions.clear();
     retSessions=0;

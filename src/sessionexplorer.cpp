@@ -399,8 +399,8 @@ void SessionExplorer::placeButtons()
     setNavigationVisible((currentPath.length()>0)&&(viewMode==ALL));
     resize();
     int currentVerticalPosition=0;
-    qSort ( sessions.begin(),sessions.end(),SessionButton::lessThen );
-    qSort ( folders.begin(), folders.end(), FolderButton::lessThen );
+    std::sort ( sessions.begin(),sessions.end(),SessionButton::lessThen );
+    std::sort ( folders.begin(), folders.end(), FolderButton::lessThen );
 
     for ( int i=0; i<folders.size(); ++i )
     {
