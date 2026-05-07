@@ -299,7 +299,7 @@ QString SshMasterConnection::getSourceFile(int pid)
         if(proc->pid==pid)
             return proc->getSource();
     }
-    return QString ::null;
+    return QString();
 }
 
 

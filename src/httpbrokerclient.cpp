@@ -837,7 +837,7 @@ void HttpBrokerClient::parsePwdChangedResult(QString pwdchres)
     if (result == "OK" )
         emit passwordChanged(config->brokerPass);
     else
-        emit passwordChanged(QString::null);
+        emit passwordChanged(QString());
 }
 
 void HttpBrokerClient::parseSession(QString sinfo)
