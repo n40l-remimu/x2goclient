@@ -31,7 +31,6 @@
 #include <QDateTime>
 #include "onmainwindow.h"
 #include "x2gosettings.h"
-#include <QDesktopWidget>
 #include <QTimer>
 #include "SVGFrame.h"
 #include "onmainwindow.h"

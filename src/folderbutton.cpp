@@ -29,7 +29,6 @@
 #include "onmainwindow.h"
 #include "x2gologdebug.h"
 #include <QApplication>
-#include <QDesktopWidget>
 #include "sessionexplorer.h"
 #include <QMouseEvent>
 

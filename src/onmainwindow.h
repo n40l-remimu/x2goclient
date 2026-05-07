@@ -34,7 +34,6 @@
 #include <QProcessEnvironment>
 #include <QDirIterator>
 #include <QApplication>
-#include <QDesktopWidget>
 #include <QTemporaryFile>
 #include <libssh/callbacks.h>
 #include "sshmasterconnection.h"

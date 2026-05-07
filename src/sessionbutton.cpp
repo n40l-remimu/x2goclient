@@ -33,7 +33,6 @@
 #include "onmainwindow.h"
 #include "x2gologdebug.h"
 #include <QApplication>
-#include <QDesktopWidget>
 #include <QSvgRenderer>
 #include <QPainter>
 #include <QImage>

@@ -28,7 +28,6 @@
 #include "x2gosettings.h"
 #include <QDir>
 #include <QApplication>
-#include <QDesktopWidget>
 #include <QTimer>
 #include <QSplashScreen>
 #include "x2gologdebug.h"

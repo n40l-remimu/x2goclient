@@ -48,7 +48,6 @@
 #include <QProcess>
 #include <QGroupBox>
 #include <QTextEdit>
-#include <QDesktopWidget>
 #include <QLineEdit>
 #include <QLabel>
 #include <QScrollArea>
@@ -100,8 +99,6 @@
 #include <sys/stat.h>
 
 #include <QCoreApplication>
-
-#include <QDesktopWidget>
 
 #define ldap_SUCCESS 0
 #define ldap_INITERROR 1
