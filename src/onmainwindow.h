@@ -147,7 +147,7 @@ struct x2goSession
     QString sndPort;
     QString fsPort;
     QString brokerUser;
-    uint connectedSince;
+    QDateTime connectedSince;
     bool published;
     int colorDepth;
     bool fullscreen;

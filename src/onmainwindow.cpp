@@ -4351,13 +4351,13 @@ void ONMainWindow::sendEventToBroker(ONMainWindow::client_events ev)
         case CONNECTING:
         {
             event="CONNECTING";
-            resumingSession.connectedSince=QDateTime::currentDateTime().toTime_t();
+            resumingSession.connectedSince=QDateTime::currentDateTime();
             break;
         }
         case CONNECTED:
         {
             event="CONNECTED";
-            resumingSession.connectedSince=QDateTime::currentDateTime().toTime_t();
+            resumingSession.connectedSince=QDateTime::currentDateTime();
             if(config.brokerLiveEventsTimeout)
             {
                 brokerAliveTimer->start(config.brokerLiveEventsTimeout*1000);
@@ -4395,7 +4395,7 @@ void ONMainWindow::sendEventToBroker(ONMainWindow::client_events ev)
 
     broker->sendEvent(event, resumingSession.sessionId,resumingSession.server, resumingSession.clientIp, getCurrentUname(),
                       resumingSession.command, resumingSession.display, resumingSession.crTime,
-                      QDateTime::currentDateTime().toTime_t()-resumingSession.connectedSince);
+                      resumingSession.connectedSince.secsTo(QDateTime::currentDateTime()));
 }
 
 
