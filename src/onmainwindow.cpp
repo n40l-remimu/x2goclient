@@ -419,9 +419,9 @@ void ONMainWindow::initUI()
         while (it.hasNext())
             fileList << it.next();
 
-        qsrand(QTime::currentTime().msec());
+        QRandomGenerator rand(QTime::currentTime().msec());
         int max=fileList.size();
-        int random_selector=qrand() % max;
+        int random_selector=rand.generate() % max;
         BGFile=fileList.at(random_selector);
     }
 
