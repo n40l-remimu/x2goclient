@@ -45,7 +45,16 @@
 #include <QLocalSocket>
 #include "x2gologdebug.h"
 
+#ifdef Q_OS_LINUX
+Display *X11Display = NULL;
+#endif
 
+#ifdef Q_OS_LINUX
+Display *getX11Display(void)
+{
+    return X11Display;
+}
+#endif
 
 int x2goMain ( int argc, char *argv[] )
 {
@@ -57,6 +66,8 @@ int x2goMain ( int argc, char *argv[] )
 #else
     app.setStyle ("fusion");
 #endif
+    using namespace QNativeInterface;
+    X11Display = app.nativeInterface<QX11Application>()->display();
 #endif
     QStringList args;
     if ( argc > 1 )

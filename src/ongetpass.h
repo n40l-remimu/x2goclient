@@ -25,12 +25,19 @@ extern "C" {
 
 #ifdef Q_OS_WIN
 __declspec(dllexport)	
-#endif	
+#endif
+#ifdef Q_OS_LINUX
+typedef struct _XDisplay Display;       // from X11/Xlib.h
+#endif
+
 int x2goMain ( int argc, char *argv[] );
 
 void askpass ( const QString& param, const QString& accept,
                const QString& cookie, const QString& socketName );
 
+#ifdef Q_OS_LINUX
+Display *getX11Display();
+#endif
 
 #ifdef __cplusplus
 }
