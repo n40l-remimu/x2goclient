@@ -170,16 +170,15 @@ ONMainWindow::ONMainWindow ( QWidget *parent ) :QMainWindow ( parent )
     directRDP = false;
 #endif /* defined (Q_OS_LINUX) */
 
-// Try to determine the native DPI and use it for the default
-    int dpix = QApplication::desktop()->physicalDpiX();
-    int dpiy = QApplication::desktop()->physicalDpiY();
-    if ( dpix >0 && dpiy >0) {
-        defaultSetDPI=true;
-        defaultDPI=(dpix+dpiy)/2;
-    } else {
-        defaultSetDPI=false;
-        defaultDPI=96;
-    }
+    // init dpi var
+    defaultSetDPI=false;
+    defaultDPI=96;
+    // Try to determine the native DPI and use it for the default
+    QScreen *screen = qGuiApp->primaryScreen();
+    Q_ASSERT(screen != NULL);
+    qreal avgdpi = screen->physicalDotsPerInch();
+    slotPhysicalDotsPerInchChanged(avgdpi);     // set dpi var
+    connect(screen,SIGNAL(physicalDotsPerInchChanged(qreal)),this,SLOT(slotPhysicalDotsPerInchChanged(qreal)));
 
 #ifdef Q_OS_WIN
     clientSshPort="7022";
@@ -12294,6 +12293,15 @@ void ONMainWindow::setProxyWinNotResizable()
     XFree(hints);
     QTimer::singleShot(1000, this, SLOT(setProxyWinNotResizable()));
 #endif
+}
+
+
+void ONMainWindow::slotPhysicalDotsPerInchChanged(qreal dpi)
+{
+  if (dpi > 0) {
+      defaultSetDPI=true;
+      defaultDPI=dpi;
+  }
 }
 
 

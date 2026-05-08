@@ -663,7 +663,7 @@ private:
     QString defaultClipboardMode;
     QString defaultCmd;
     bool defaultSetDPI;
-    uint defaultDPI;
+    qreal defaultDPI;
     QStringList listedSessions;
     QString appDir;
     QString localGraphicPort;
@@ -1083,6 +1083,7 @@ private slots:
     void slotReadApplications(bool result, QString output, int pid );
     void slotResLoadRequestFinished( QNetworkReply*  reply );
     void setProxyWinNotResizable();
+    void slotPhysicalDotsPerInchChanged(qreal dpi);
 
 public slots:
     void slotConfig();
