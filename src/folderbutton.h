@@ -36,7 +36,7 @@ public:
     FolderButton ( ONMainWindow* mw, QWidget* parent, QString folderPath, QString folderName );
     ~FolderButton();
 
-    const QPixmap* folderIcon() {
+    QPixmap folderIcon() {
         return icon->pixmap();
     }
     static bool lessThen ( const FolderButton* b1, const FolderButton* b2 );
