@@ -693,8 +693,8 @@ void HttpBrokerClient::slotConnectionTest(bool success, QString answer, int)
         return;
     if(!sshBroker)
     {
-        x2goDebug<<"Elapsed: "<<requestTime.elapsed()<<"; received:"<<answer.size()<<X2GO_COMPAT_ENDL;
-        emit connectionTime(requestTime.elapsed(),answer.size());
+        x2goDebug<<"Elapsed: "<<requestTime.msecsTo(QDateTime::currentDateTimeUtc())<<"; received:"<<answer.size()<<X2GO_COMPAT_ENDL;
+        emit connectionTime(requestTime.msecsTo(QDateTime::currentDateTimeUtc()),answer.size());
     }
     return;
 
@@ -958,7 +958,7 @@ void HttpBrokerClient::slotSslErrors ( QNetworkReply* netReply, const QList<QSsl
         if ( mcert==cert )
         {
             netReply->ignoreSslErrors();
-            requestTime.restart();
+            requestTime = QDateTime::currentDateTimeUtc();
             return;
         }
     }
@@ -1055,7 +1055,7 @@ void HttpBrokerClient::slotSslErrors ( QNetworkReply* netReply, const QList<QSsl
         netReply->ignoreSslErrors();
         x2goDebug<<"Storing certificate in "<<homeDir+"/.x2go/ssl/exceptions/"+
                  lurl.host() +"/"+fname;
-        requestTime.restart();
+        requestTime = QDateTime::currentDateTimeUtc();
     }
     else
         emit fatalHttpError();

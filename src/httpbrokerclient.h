@@ -64,7 +64,7 @@ private:
     QString newBrokerPass;
     ConfigFile* config;
     ONMainWindow* mainWindow;
-    QTime requestTime;
+    QDateTime requestTime;
     bool sshBroker;
     SshMasterConnection* sshConnection;
     QStringList suspendedSession;
