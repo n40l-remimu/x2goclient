@@ -22,6 +22,7 @@
 #include <QRegularExpression>
 #include "help.h"
 #include "compat.h"
+#include "ongetpass.h"
 
 #include <QStyleFactory>
 
@@ -718,7 +719,7 @@ void ONMainWindow::slotSyncX()
         if (!isHidden())
             hide();
 #ifdef Q_OS_LINUX
-        XSync(QX11Info::display(),false);
+        XSync(getX11Display(),false);
 #endif
     }
     else
@@ -1479,9 +1480,9 @@ void ONMainWindow::closeClient()
         x2goDebug<<"Saved settings.";
 #ifdef Q_OS_LINUX
         if (image)
-            XFreePixmap(QX11Info::display(),image);
+            XFreePixmap(getX11Display(),image);
         if (shape)
-            XFreePixmap(QX11Info::display(),shape);
+            XFreePixmap(getX11Display(),shape);
 #endif
     }
     if ( nxproxy!=0l )
@@ -12004,7 +12005,7 @@ void ONMainWindow::setProxyWinTitle()
 
 #ifdef Q_OS_LINUX
 
-    XStoreName(QX11Info::display(), proxyWinId, title.toLocal8Bit().data());
+    XStoreName(getX11Display(), proxyWinId, title.toLocal8Bit().data());
 
     XWMHints* win_hints;
 
@@ -12018,12 +12019,12 @@ void ONMainWindow::setProxyWinTitle()
     int rez;
 
     if (image)
-        XFreePixmap(QX11Info::display(),image);
+        XFreePixmap(getX11Display(),image);
     if (shape)
-        XFreePixmap(QX11Info::display(),shape);
+        XFreePixmap(getX11Display(),shape);
 
 
-    rez=XpmCreatePixmapFromBuffer(QX11Info::display(), proxyWinId, bytes.data(),
+    rez=XpmCreatePixmapFromBuffer(getX11Display(), proxyWinId, bytes.data(),
                                   (Pixmap *) &image, (Pixmap *) &shape, NULL);
     if (!rez)
     {
@@ -12034,7 +12035,7 @@ void ONMainWindow::setProxyWinTitle()
             win_hints->flags = IconPixmapHint|IconMaskHint;
             win_hints->icon_pixmap = image;
             win_hints->icon_mask = shape;
-            XSetWMHints(QX11Info::display(), proxyWinId, win_hints);
+            XSetWMHints(getX11Display(), proxyWinId, win_hints);
             XFree(win_hints);
         }
     }
@@ -12052,38 +12053,38 @@ void ONMainWindow::slotSetProxyWinFullscreen()
 #ifdef Q_OS_LINUX
 
     QRect geom=QApplication::desktop()->screenGeometry(localDisplayNumber-1);
-    Atom atom = XInternAtom ( QX11Info::display(), "_NET_WM_STATE_FULLSCREEN", True );
+    Atom atom = XInternAtom ( getX11Display(), "_NET_WM_STATE_FULLSCREEN", True );
     XChangeProperty (
-        QX11Info::display(), proxyWinId,
-        XInternAtom ( QX11Info::display(), "_NET_WM_STATE", True ),
+        getX11Display(), proxyWinId,
+        XInternAtom ( getX11Display(), "_NET_WM_STATE", True ),
         XA_ATOM,  32,  PropModeReplace,
         (unsigned char*) &atom,  1 );
 
-    XMapWindow(QX11Info::display(), proxyWinId);
+    XMapWindow(getX11Display(), proxyWinId);
 
-    XSync(QX11Info::display(),false);
+    XSync(getX11Display(),false);
     XEvent event;
     event.xclient.type = ClientMessage;
     event.xclient.serial = 0;
     event.xclient.send_event = True;
-    event.xclient.display = QX11Info::display();
+    event.xclient.display = getX11Display();
     event.xclient.window = proxyWinId;
-    event.xclient.message_type = XInternAtom(QX11Info::display(),"_NET_WM_STATE",False);
+    event.xclient.message_type = XInternAtom(getX11Display(),"_NET_WM_STATE",False);
     event.xclient.format = 32;
     event.xclient.data.l[0] = 1;
-    event.xclient.data.l[1] = XInternAtom(QX11Info::display(),"_NET_WM_STATE_FULLSCREEN",False);
+    event.xclient.data.l[1] = XInternAtom(getX11Display(),"_NET_WM_STATE_FULLSCREEN",False);
     event.xclient.data.l[2] = 0;
     event.xclient.data.l[3] = 1;
     event.xclient.data.l[4] = 0;
     Status st;
-    st=XSendEvent(QX11Info::display(), DefaultRootWindow(QX11Info::display()),
+    st=XSendEvent(getX11Display(), DefaultRootWindow(getX11Display()),
                   False, SubstructureNotifyMask ,&event);
     if(!st)
     {
         x2goDebug<<"Couldn't fetch fullscreen setting.";
     }
-    XSync(QX11Info::display(),false);
-    XMapWindow(QX11Info::display(), proxyWinId);
+    XSync(getX11Display(),false);
+    XMapWindow(getX11Display(), proxyWinId);
 
     QString geoStr = QString("%1").arg(geom.width()) + "x"+ QString("%1").arg(geom.height());
 
@@ -12111,10 +12112,10 @@ void ONMainWindow::resizeProxyWinOnDisplay(int disp)
     x2goDebug<<"Resizing proxy window to fit display: " + QString("%1").arg(disp) + " " + geoStr;
 
 #ifdef Q_OS_LINUX
-    XSync(QX11Info::display(),false);
-    XMoveResizeWindow(QX11Info::display(), proxyWinId, geom.x(), geom.y(), 800, 600);
-    XMapWindow(QX11Info::display(), proxyWinId);
-    XFlush(QX11Info::display());
+    XSync(getX11Display(),false);
+    XMoveResizeWindow(getX11Display(), proxyWinId, geom.x(), geom.y(), 800, 600);
+    XMapWindow(getX11Display(), proxyWinId);
+    XFlush(getX11Display());
 #endif
 #ifdef Q_OS_WIN
     dispGeometry=geom;
@@ -12135,12 +12136,12 @@ QRect ONMainWindow::proxyWinGeometry()
     Window root;
     int x,y;
     uint w,h,border,depth;
-    if (XGetGeometry(QX11Info::display(), proxyWinId, &root,&x,&y,&w,&h,&border,&depth))
+    if (XGetGeometry(getX11Display(), proxyWinId, &root,&x,&y,&w,&h,&border,&depth))
     {
 
         int realx,realy;
         Window child;
-        XTranslateCoordinates(QX11Info::display(), proxyWinId, root, 0, 0, &realx, &realy, &child);
+        XTranslateCoordinates(getX11Display(), proxyWinId, root, 0, 0, &realx, &realy, &child);
         proxyRect.setRect(realx, realy, w,h);
     }
     return proxyRect;
@@ -12226,10 +12227,10 @@ void ONMainWindow::slotXineramaConfigured()
         xinSizeInc=-1;
 #ifdef Q_OS_LINUX
     lastDisplayGeometry.setWidth(lastDisplayGeometry.width()+xinSizeInc);
-    XSync(QX11Info::display(),false);
-    XResizeWindow(QX11Info::display(), proxyWinId,
+    XSync(getX11Display(),false);
+    XResizeWindow(getX11Display(), proxyWinId,
                   lastDisplayGeometry.width(),lastDisplayGeometry.height());
-    XSync(QX11Info::display(),false);
+    XSync(getX11Display(),false);
 #endif
 #ifdef Q_OS_WIN
     QRect geom;
@@ -12256,7 +12257,7 @@ void ONMainWindow::setProxyWinNotResizable()
 #endif
 #ifdef Q_OS_LINUX
     XWindowAttributes wattr;
-    if(! XGetWindowAttributes(QX11Info::display(), proxyWinId, &wattr))
+    if(! XGetWindowAttributes(getX11Display(), proxyWinId, &wattr))
     {
         x2goDebug<<"Proxy window is closed, stop checking properties";
         return;
@@ -12269,7 +12270,7 @@ void ONMainWindow::setProxyWinNotResizable()
 
     XSizeHints rhints;
     long rflags;
-    if(!XGetWMNormalHints(QX11Info::display(), proxyWinId, &rhints, &rflags))
+    if(!XGetWMNormalHints(getX11Display(), proxyWinId, &rhints, &rflags))
     {
         x2goDebug<<"Failed to get hints for proxy window, stop checking properties";
         return;
@@ -12281,15 +12282,15 @@ void ONMainWindow::setProxyWinNotResizable()
     }
 
     XSizeHints* hints;
-    XSync(QX11Info::display(),false);
+    XSync(getX11Display(),false);
     hints=XAllocSizeHints();
     hints->flags= PMinSize|PMaxSize;
     hints->base_width=hints->max_width=hints->min_width=proxyWinWidth;
     hints->base_height=hints->max_height=hints->min_height=proxyWinHeight;
 //     x2goDebug<<"Setting X11 hints on proxy window";
-    XSetWMNormalHints(QX11Info::display(), proxyWinId, hints);
-    XSync(QX11Info::display(),false);
-    XFlush(QX11Info::display());
+    XSetWMNormalHints(getX11Display(), proxyWinId, hints);
+    XSync(getX11Display(),false);
+    XFlush(getX11Display());
     XFree(hints);
     QTimer::singleShot(1000, this, SLOT(setProxyWinNotResizable()));
 #endif
@@ -13892,15 +13893,15 @@ long ONMainWindow::X11FindWindow ( QString text, long rootWin )
     unsigned  nChildren;
     long proxyId=0;
     if ( !rootWin )
-        rootWin= XDefaultRootWindow ( QX11Info::display() );
+        rootWin= XDefaultRootWindow ( getX11Display() );
 
-    if ( XQueryTree ( QX11Info::display(),rootWin,&wRoot,&wParent,
+    if ( XQueryTree ( getX11Display(),rootWin,&wRoot,&wParent,
                       &child_list,&nChildren ) )
     {
         for ( uint i=0; i<nChildren; ++i )
         {
             char *wname;
-            if ( XFetchName ( QX11Info::display(),
+            if ( XFetchName ( getX11Display(),
                               child_list[i],&wname ) )
             {
                 QString title ( wname );
