@@ -37,3 +37,15 @@ x2goclient.pro.user
 
 # Auto-generated from template.
 debian/control
+
+# qmake
+.qmake.stash
+
+# backup files from joe
+*~
+
+# eclipse
+.project
+.cproject
+.settings/
+
