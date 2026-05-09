@@ -12000,7 +12000,7 @@ void ONMainWindow::setProxyWinTitle()
     if (useLdap)
         pixmap=lastUser->foto();
     else
-        pixmap=*(sessionExplorer->getLastSession()->sessIcon());
+        pixmap=sessionExplorer->getLastSession()->sessIcon();
 
 #ifdef Q_OS_LINUX
 

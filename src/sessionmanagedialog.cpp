@@ -188,7 +188,7 @@ void SessionManageDialog::initFolders(QTreeWidgetItem* parent, QString path)
         {
             QTreeWidgetItem* it=new QTreeWidgetItem(parent);
             it->setText(0,s->name());
-            it->setIcon(0, QIcon(*(s->sessIcon())));
+            it->setIcon(0, QIcon(s->sessIcon()));
             QString normPath=(s->getPath()+"/"+s->name()).split("/",X2GO_COMPAT_SKIPEMPTYPARTS).join("/");
             it->setData(0,Qt::UserRole, normPath+"/");
             it->setData(0, SESSIONROLE, true);
