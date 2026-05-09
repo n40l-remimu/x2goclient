@@ -3214,7 +3214,7 @@ void ONMainWindow::slotServSshConnectionOk(QString server)
     con->executeCommand( "x2golistsessions", this, SLOT (slotListAllSessions ( bool,QString,int ) ));
 }
 
-void ONMainWindow::slotSshInteractionFinish(SshMasterConnection* connection)
+void ONMainWindow::slotSshInteractionFinish(SshMasterConnection* /*connection*/)
 {
     if(interDlg->isInterrupted())
     {

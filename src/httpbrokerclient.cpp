@@ -1073,7 +1073,7 @@ QString HttpBrokerClient::getHexVal ( const QByteArray& ba )
     return val.join ( ":" );
 }
 
-void HttpBrokerClient::slotSshIoErr(SshProcess* caller, QString error, QString lastSessionError)
+void HttpBrokerClient::slotSshIoErr(SshProcess* /*caller*/, QString /*error*/, QString /*lastSessionError*/)
 {
     x2goDebug<<"Brocker SSH Connection IO Error, reconnect session\n";
     if ( sshConnection )
