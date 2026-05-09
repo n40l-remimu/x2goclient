@@ -127,7 +127,7 @@ ShareWidget::ShareWidget ( QString id, ONMainWindow * mw,
     expTv->setModel ( ( QAbstractItemModel* ) model );
     QFontMetrics fm1 ( expTv->font() );
     expTv->header()->resizeSection ( 1,
-                                     fm1.width ( tr ( "Automount" ) ) +10 );
+                                     fm1.boundingRect ( tr ( "Automount" ) ).width() +10 );
     connect ( openDir,SIGNAL ( clicked() ),this,SLOT ( slot_openDir() ) );
     connect ( addDir,SIGNAL ( clicked() ),this,SLOT ( slot_addDir() ) );
     connect ( delDir,SIGNAL ( clicked() ),this,SLOT ( slot_delDir() ) );

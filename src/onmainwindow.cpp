@@ -5280,10 +5280,10 @@ void ONMainWindow::selectSession ( QStringList& sessions )
                 QString txt=
                     model->index ( row,j ).data().toString();
                 if ( sessTv->header()->sectionSize ( j ) <
-                        fm.width ( txt ) +6 )
+                        fm.boundingRect ( txt ).width() +6 )
                 {
                     sessTv->header()->resizeSection (
-                        j,fm.width ( txt ) +6 );
+                        j,fm.boundingRect ( txt ).width() +6 );
                 }
             }
         }
@@ -13749,10 +13749,10 @@ void ONMainWindow::filterDesktops ( const QString& filter, bool strict )
                     modelDesktop->index (
                         row,j ).data().toString();
                 if ( sessTv->header()->sectionSize ( j ) <
-                        fm.width ( txt ) +6 )
+                        fm.boundingRect ( txt ).width() +6 )
                 {
                     sessTv->header()->resizeSection (
-                        j,fm.width ( txt ) +6 );
+                        j,fm.boundingRect ( txt ).width() +6 );
                 }
             }
         }
