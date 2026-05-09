@@ -622,14 +622,15 @@ void SessionButton::redraw()
 
     geomBox->clear();
     geomBox->addItem ( tr ( "fullscreen" ) );
-    uint displays=QApplication::desktop()->numScreens();
+    uint displays=QGuiApplication::screens().count();
     if (!directRDP)
         for (uint i=0; i<displays; ++i)
         {
             geomBox->addItem ( tr( "Display " )+QString::number(i+1));
 
             //add maximun available area
-            geomBox->addItem( QString::number(QApplication::desktop()->availableGeometry(i).width()) + "x" + QString::number(QApplication::desktop()->availableGeometry(i).height()));
+            QRect availableGeometry = QGuiApplication::screens().at(i)->availableGeometry();
+            geomBox->addItem( QString::number(availableGeometry.width()) + "x" + QString::number(availableGeometry.height()));
 
 
         }

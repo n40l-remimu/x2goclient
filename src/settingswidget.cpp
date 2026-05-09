@@ -38,7 +38,7 @@ SettingsWidget::SettingsWidget ( QString id, ONMainWindow * mw,
                                  QWidget * parent, Qt::WindowFlags f )
     : ConfigWidget ( id,mw,parent,f )
 {
-    multiDisp=(QApplication::desktop()->screenCount()>1);
+    multiDisp=(QGuiApplication::screens().count()>1);
     QGroupBox *dgb=new QGroupBox ( tr ( "&Display" ),this );
     clipGr=new QGroupBox ( tr ( "&Clipboard mode" ),this );
     kgb=new QGroupBox ( tr ( "&Keyboard" ),this );
@@ -103,7 +103,7 @@ SettingsWidget::SettingsWidget ( QString id, ONMainWindow * mw,
     lDisplay->setBuddy(displayNumber);
 
     displayNumber->setMinimum(1);
-    displayNumber->setMaximum(QApplication::desktop()->screenCount());
+    displayNumber->setMaximum(QGuiApplication::screens().count());
     if ((!multiDisp) || (mainWindow->debugging))
     {
         displayNumber->hide();
@@ -324,7 +324,8 @@ void SettingsWidget::slot_identDisplays()
 {
     pbIdentDisp->setEnabled(false);
     identWins.clear();
-    for (int i=0; i<QApplication::desktop()->screenCount(); ++i)
+    QList <QScreen *> screenlist = QGuiApplication::screens();
+    for (int i=0; i<screenlist.count(); ++i)
     {
         QMainWindow *mw=new QMainWindow(
             this, Qt::FramelessWindowHint|Qt::X11BypassWindowManagerHint|Qt::WindowStaysOnTopHint);
@@ -337,7 +338,7 @@ void SettingsWidget::slot_identDisplays()
         fr->setAlignment(Qt::AlignCenter);
         mw->setCentralWidget(fr);
         fr->setFrameStyle(QFrame::Box);
-        QRect geom=QApplication::desktop()->screenGeometry(i);
+        QRect geom=screenlist.at(i)->geometry();
         int x_pos=geom.width()/2-75;
         int y_pos=geom.height()/2-100;
         x_pos=565;
@@ -598,8 +599,9 @@ void SettingsWidget::saveSettings()
         int selectedScreen = st.setting()->value(sessionId + "/display", (QVariant) -1).toInt();
 
         //get max available desktop area for selected screen
-        int height = QApplication::desktop()->availableGeometry(selectedScreen).height();
-        int width = QApplication::desktop()->availableGeometry(selectedScreen).width();
+        const QRect screenrect = QGuiApplication::screens().at(selectedScreen)->geometry();
+        int height = screenrect.height();
+        int width = screenrect.width();
 
         //save max resolution
         st.setting()->setValue (sessionId + "/width", (QVariant) width);

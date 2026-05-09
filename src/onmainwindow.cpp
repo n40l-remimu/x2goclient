@@ -1709,10 +1709,10 @@ void ONMainWindow::loadSettings()
      * Otherwise use the default.
      */
     bool placement_found = false;
-    QDesktopWidget *desktop_widget = QApplication::desktop ();
+    QList <QScreen *> screenlist = QGuiApplication::screens();
     QRect main_window_geom (mwPos, mwSize);
-    for (size_t i = 0; i < static_cast<size_t> (desktop_widget->screenCount ()); ++i) {
-        QRect tmp_geom = desktop_widget->availableGeometry (i);
+    for (auto screenptr = screenlist.begin(); screenptr != screenlist.end(); ++screenptr) {
+        QRect tmp_geom = (*screenptr)->geometry();
 
         if (tmp_geom.intersects (main_window_geom)) {
             placement_found = true;
@@ -4501,8 +4501,9 @@ void ONMainWindow::startNewSession()
         if ( st->setting()->value(sid + "/maxdim", (QVariant) false).toBool())
         {
             int selectedScreen = st->setting()->value(sid + "/display", (QVariant) -1).toInt();
-            height=QApplication::desktop()->availableGeometry(selectedScreen).height();
-            width=QApplication::desktop()->availableGeometry(selectedScreen).width();
+            QRect geom= QGuiApplication::screens().at(selectedScreen)->availableGeometry();
+            height=geom.height();
+            width=geom.width();
         }
         else if(st->setting()->value(sid + "/multidisp", (QVariant) false).toBool())
         {
@@ -12051,7 +12052,7 @@ void ONMainWindow::slotSetProxyWinFullscreen()
 
 #ifdef Q_OS_LINUX
 
-    QRect geom=QApplication::desktop()->screenGeometry(localDisplayNumber-1);
+    QRect geom= QGuiApplication::screens().at(localDisplayNumber-1)->virtualGeometry();
     Atom atom = XInternAtom ( getX11Display(), "_NET_WM_STATE_FULLSCREEN", True );
     XChangeProperty (
         getX11Display(), proxyWinId,
@@ -12101,7 +12102,7 @@ void ONMainWindow::slotSetProxyWinFullscreen()
 
 void ONMainWindow::resizeProxyWinOnDisplay(int disp)
 {
-    QRect geom=QApplication::desktop()->screenGeometry(disp-1);
+    QRect geom= QGuiApplication::screens().at(disp-1)->virtualGeometry();
 
     QString geoStr =
         "(x: " + QString("%1").arg(geom.x()) +
@@ -12168,9 +12169,9 @@ void ONMainWindow::slotConfigXinerama()
         ", h: "+ QString("%1").arg(lastDisplayGeometry.height());
     x2goDebug<<"New proxy geometry: " + geoStr;
 
-    QDesktopWidget* root=QApplication::desktop();
     QList<QRect> newXineramaScreens;
-    for (int i=0; i< root->numScreens(); ++i)
+    QList <QScreen *> screenlist = QGuiApplication::screens();
+    for (auto screenptr = screenlist.begin(); screenptr != screenlist.end(); ++screenptr)
     {
         QRect intersection;
         if (resumingSession.fullscreen)
@@ -12178,10 +12179,11 @@ void ONMainWindow::slotConfigXinerama()
             x2goDebug<<"correcting display geometry for full screen session";
             lastDisplayGeometry.setX(0);
             lastDisplayGeometry.setY(0);
-            intersection=root->screenGeometry(i);
+            intersection=(*screenptr)->geometry();
         }
         else
-            intersection=root->screenGeometry(i).intersected(lastDisplayGeometry);
+            intersection=(*screenptr)->geometry().intersected(lastDisplayGeometry);
+
         if (!intersection.isNull())
         {
             //            x2goDebug<<"intersected with "<<i<<": "<<intersection<<X2GO_COMPAT_ENDL;
@@ -12342,7 +12344,7 @@ void ONMainWindow::slotFindProxyWin()
                 xinerama=st->setting()->value ( sid+"/xinerama",
                                                 ( QVariant ) defaultXinerama ).toBool();
 #ifndef Q_OS_WIN
-                uint displays=QApplication::desktop()->numScreens();
+                uint displays=QGuiApplication::screens().count();
                 if (st->setting()->value ( sid+"/multidisp",
                                            ( QVariant ) false ).toBool())
                 {
