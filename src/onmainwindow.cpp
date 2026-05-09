@@ -12165,7 +12165,8 @@ void ONMainWindow::slotConfigXinerama()
         "(x: " + QString("%1").arg(lastDisplayGeometry.x()) +
         ", y: "+ QString("%1").arg(lastDisplayGeometry.y()) +
         ", w: "+ QString("%1").arg(lastDisplayGeometry.width()) +
-        ", h: "+ QString("%1").arg(lastDisplayGeometry.height());
+        ", h: "+ QString("%1").arg(lastDisplayGeometry.height()) +
+        ")";
     x2goDebug<<"New proxy geometry: " + geoStr;
 
     QList<QRect> newXineramaScreens;
