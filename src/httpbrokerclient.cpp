@@ -71,7 +71,7 @@ HttpBrokerClient::HttpBrokerClient ( ONMainWindow* wnd, ConfigFile* cfg )
         sshBroker=false;
 
         if ((config->brokerCaCertFile.length() >0) && (QFile::exists(config->brokerCaCertFile))) {
-            QSslSocket::addDefaultCaCertificates(config->brokerCaCertFile, QSsl::Pem);
+            QSslConfiguration::defaultConfiguration().addCaCertificates(config->brokerCaCertFile, QSsl::Pem);
             x2goDebug<<"Custom CA certificate file loaded into HTTPS broker client: "<<config->brokerCaCertFile;
         }
 
