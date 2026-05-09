@@ -1067,8 +1067,7 @@ QString HttpBrokerClient::getHexVal ( const QByteArray& ba )
     QStringList val;
     for ( int i=0; i<ba.size(); ++i )
     {
-        QString bt;
-        bt.sprintf ( "%02X", ( unsigned char ) ba[i] );
+        QString bt = QString( "0X%1").arg(( unsigned short ) ba[i], 0, 16 );
         val<<bt;
     }
     return val.join ( ":" );
