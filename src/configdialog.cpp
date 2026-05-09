@@ -67,7 +67,7 @@ ConfigDialog::ConfigDialog ( QWidget * parent,  Qt::WindowFlags f )
     gbTrayIcon->setCheckable(true);
     QHBoxLayout* grmainLay=new QHBoxLayout(gbTrayIcon);
     QFrame* frTray=new QFrame(gbTrayIcon);
-    grmainLay->setMargin(0);
+    grmainLay->setContentsMargins(0, 0, 0, 0);
     grmainLay->addWidget(frTray);
     cbMinToTray=new QCheckBox(tr("Hide to system tray when minimized"),frTray);
     cbNoClose=new QCheckBox(tr("Hide to system tray when closed"),frTray);
@@ -93,7 +93,7 @@ ConfigDialog::ConfigDialog ( QWidget * parent,  Qt::WindowFlags f )
         gbLDAP->setCheckable(true);
         QHBoxLayout* grmainLay=new QHBoxLayout(gbLDAP);
         QFrame* frLdap=new QFrame(gbLDAP);
-        grmainLay->setMargin(0);
+        grmainLay->setContentsMargins(0, 0, 0, 0);
         grmainLay->addWidget(frLdap);
 
         ldapServer=new QLineEdit ( frLdap );

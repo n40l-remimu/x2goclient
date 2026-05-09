@@ -497,7 +497,7 @@ void ONMainWindow::initUI()
 
     bgLay=new QHBoxLayout ( bgFrame );
     bgLay->setSpacing ( 0 );
-    bgLay->setMargin ( 0 );
+    bgLay->setContentsMargins ( 0, 0, 0, 0 );
     bgLay->addLayout ( onlay );
     bgLay->addStretch();
     username=new QHBoxLayout();
@@ -572,7 +572,7 @@ void ONMainWindow::initUI()
 #endif /* defined (Q_OS_DARWIN) || defined (Q_OS_WIN) */
 
     mainL->setSpacing ( 0 );
-    mainL->setMargin ( 0 );
+    mainL->setContentsMargins ( 0, 0, 0, 0 );
     mainL->insertWidget ( 0, bgFrame );
     hide();
     QTimer::singleShot ( 1, this, SLOT ( slotResize() ) );

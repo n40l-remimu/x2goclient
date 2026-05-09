@@ -61,8 +61,8 @@ ConnectionWidget::ConnectionWidget ( QString id, ONMainWindow * mw,
 	spdLay->addLayout ( slideLay );
 	spdLay->addLayout ( tickLay );
 	QFontMetrics fm ( mlab->font() );
-	slideLay->insertSpacing ( 0,fm.width ( "MODEM" ) /2 );
-	slideLay->addSpacing ( fm.width ( "LAN" ) /2 );
+	slideLay->insertSpacing ( 0,fm.boundingRect( "MODEM" ).width() /2 );
+	slideLay->addSpacing ( fm.boundingRect( "LAN" ).width() /2 );
 
 	QGroupBox* compr=new QGroupBox ( tr ( "C&ompression" ),this );
 	QHBoxLayout* comprLay=new QHBoxLayout ( compr );
