@@ -279,6 +279,8 @@ ONMainWindow::ONMainWindow ( QWidget *parent ) :QMainWindow ( parent )
     }
 #endif
 
+    resumingSession = x2goSession();
+
     if(resourcesLoaded)
         initUI();
 }
