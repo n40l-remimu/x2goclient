@@ -51,8 +51,6 @@ public:
     void resumeSession(const QString& id, const QString& server);
 private:
     QNetworkAccessManager* http;
-    QNetworkRequest* netRequest;
-    QSslSocket* sslSocket;
     QNetworkReply* sessionsRequest;
     QNetworkReply* selSessRequest;
     QNetworkReply* chPassRequest;
