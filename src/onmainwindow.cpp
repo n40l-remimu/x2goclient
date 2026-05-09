@@ -2387,7 +2387,9 @@ void ONMainWindow::slotReadSessions()
         st=new X2goSettings(config.iniFile,QSettings::IniFormat);
         sessionStatusDlg->hide();
         setEnabled ( true );
-        if(config.brokerSyncTimeout*1000!=brokerSyncTimer->interval())
+        // make shure the uint values does not exceed the max int value
+        Q_ASSERT (config.brokerSyncTimeout*1000 <= static_cast<uint>((std::numeric_limits<int>::max)()));
+        if(static_cast<int>(config.brokerSyncTimeout*1000)!=brokerSyncTimer->interval())
         {
             brokerSyncTimer->setInterval(config.brokerSyncTimeout*1000);
         }
