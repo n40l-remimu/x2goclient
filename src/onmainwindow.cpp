@@ -388,10 +388,10 @@ void ONMainWindow::initUI()
     }
 
 
-    QDesktopWidget wd;
+    QRect vscreengeometry = this->screen()->virtualGeometry();
 
-    if ( wd.screenGeometry(wd.screenNumber(this)).width() <1024 ||
-            wd.screenGeometry(wd.screenNumber(this)).height() <768 )
+    if ( vscreengeometry.width() <1024 ||
+        vscreengeometry.height() <768 )
     {
         miniMode=true;
         x2goDebug<<"Switching to \"mini\" mode...";
@@ -3739,8 +3739,9 @@ void ONMainWindow::startDirectRDP()
         }
         else if (maxRes)
         {
-            QDesktopWidget wd;
-            grOpt=" -D -g "+QString::number( wd.screenGeometry().width())+"x"+QString::number(wd.screenGeometry().height())+" ";
+            QRect vscreengeometry = this->screen()->virtualGeometry();
+
+            grOpt=" -D -g "+QString::number( vscreengeometry.width())+"x"+QString::number(vscreengeometry.height())+" ";
         }
         else
         {
@@ -3766,8 +3767,9 @@ void ONMainWindow::startDirectRDP()
         }
         else if (maxRes)
         {
-            QDesktopWidget wd;
-            grOpt=" /w:"+QString::number( wd.screenGeometry().width())+" /h:"+QString::number(wd.screenGeometry().height())+" ";
+            QRect vscreengeometry = this->screen()->virtualGeometry();
+
+            grOpt=" /w:"+QString::number( vscreengeometry.width())+" /h:"+QString::number(vscreengeometry.height())+" ";
         }
         else
         {
@@ -3790,8 +3792,9 @@ void ONMainWindow::startDirectRDP()
             }
             else if (maxRes)
             {
-                QDesktopWidget wd;
-                grOpt=" -screen "+QString::number( wd.screenGeometry().width())+"x"+QString::number(wd.screenGeometry().height())+" ";
+                QRect vscreengeometry = this->screen()->virtualGeometry();
+
+                grOpt=" -screen "+QString::number( vscreengeometry.width())+"x"+QString::number(vscreengeometry.height())+" ";
             }
             else
             {
@@ -3802,8 +3805,9 @@ void ONMainWindow::startDirectRDP()
         {
             if (maxRes)
             {
-                QDesktopWidget wd;
-                grOpt=" -geometry "+QString::number( wd.screenGeometry().width())+"x"+QString::number(wd.screenGeometry().height())+" ";
+                QRect vscreengeometry = this->screen()->virtualGeometry();
+
+                grOpt=" -geometry "+QString::number( vscreengeometry.width())+"x"+QString::number(vscreengeometry.height())+" ";
             }
             else
             {
@@ -4223,8 +4227,6 @@ void ONMainWindow::slotListSessions ( bool result,QString output,
         {
             x2goSession s=getSessionFromString ( sessions[0] );
 
-            QDesktopWidget wd;
-
             //we already selected the session
             if(brokerMode)
             {
@@ -4234,7 +4236,7 @@ void ONMainWindow::slotListSessions ( bool result,QString output,
 
             /* Check getSessionFromString for what this "invalid" string means. */
             if ((s.agentPid != "invalid") && (s.status == "S")
-                && (isColorDepthOk (wd.depth (), s.colorDepth))
+                && (isColorDepthOk (this->screen()->depth (), s.colorDepth))
                 && (s.command == selectedCommand)&&autoresume)
                 resumeSession ( s );
             else
@@ -4256,11 +4258,9 @@ void ONMainWindow::slotListSessions ( bool result,QString output,
                     x2goSession s=getSessionFromString (
                                       sessions[i] );
 
-                    QDesktopWidget wd;
-
                     /* Check getSessionFromString for what this "invalid" string means. */
                     if ((s.agentPid != "invalid") && (s.status == "S")
-                        && (isColorDepthOk (wd.depth (), s.colorDepth))
+                        && (isColorDepthOk (this->screen()->depth (), s.colorDepth))
                         && (s.command == selectedCommand))
                     {
                         resumeSession ( s );
@@ -4744,8 +4744,7 @@ void ONMainWindow::startNewSession()
         else
             selectSessionDlg->hide();
     }
-    QDesktopWidget wd;
-    QString depth=QString::number ( wd.depth() );
+    QString depth=QString::number ( this->screen()->depth () );
 #ifdef Q_OS_DARWIN
     usekbd=0;
     type="query";
@@ -5424,8 +5423,7 @@ void ONMainWindow::slotResumeSess()
         broker->resumeSession(s.sessionId, s.server);
         return;
     }
-    QDesktopWidget wd;
-    if ( isColorDepthOk ( wd.depth(),s.colorDepth ) )
+    if ( isColorDepthOk ( this->screen()->depth(),s.colorDepth ) )
     {
         if ( s.status=="R" && ! resumeAfterSuspending)
         {
@@ -9081,11 +9079,9 @@ void ONMainWindow::slotListAllSessions ( bool result,QString output,
 
             x2goDebug<<"Will proceed with this session.";
 
-            QDesktopWidget wd;
-
             /* Check getSessionFromString for what this "invalid" string means. */
             if ((s.agentPid != "invalid") && (s.status == "S")
-                && (isColorDepthOk (wd.depth (), s.colorDepth)))
+                && (isColorDepthOk (this->screen()->depth (), s.colorDepth)))
             {
                 resumeSession ( s );
             }
@@ -9867,8 +9863,7 @@ void ONMainWindow::setUsersEnabled ( bool enable )
         QScrollBar* bar=users->verticalScrollBar();
         bar->setEnabled ( enable );
         int upos=bar->value();
-        QDesktopWidget dw;
-        int height=dw.screenGeometry ( fr ).height();
+        int height = fr->screen()->virtualGeometry().height();
         QList<UserButton*>::iterator it;
         QList<UserButton*>::iterator endit=names.end();
         if ( !enable )
