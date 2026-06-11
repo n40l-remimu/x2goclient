@@ -6598,7 +6598,16 @@ void ONMainWindow::slotTunnelOk(int)
     else
     {
         x2goDebug<<"Starting NX proxy, command: " + proxyCmd;
-        nxproxy->start ( proxyCmd);
+		// correction du lancement de nxproxy - nxproxy start fix
+		// see https://forums.gentoo.org/viewtopic.php?p=8887058#p8887058 (in French)
+		QStringList args = QProcess::splitCommand(proxyCmd);
+		QString program = args.takeFirst();
+
+		nxproxy->start(program, args);
+		//
+		// dont use this anymore !
+        // nxproxy->start ( proxyCmd);
+		//
     }
 
     proxyRunning=true;
