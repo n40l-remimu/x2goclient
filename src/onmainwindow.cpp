@@ -3711,7 +3711,7 @@ void ONMainWindow::startDirectRDP()
 
     nxproxy=new QProcess;
     proxyErrString="";
-    connect ( nxproxy,SIGNAL ( error ( QProcess::ProcessError ) ),this,
+    connect ( nxproxy,SIGNAL ( errorOccurred ( QProcess::ProcessError ) ),this,
               SLOT ( slotProxyError ( QProcess::ProcessError ) ) );
     connect ( nxproxy,SIGNAL ( finished ( int,QProcess::ExitStatus ) ),this,
               SLOT ( slotProxyFinished ( int,QProcess::ExitStatus ) ) );
@@ -6473,7 +6473,7 @@ void ONMainWindow::slotTunnelOk(int)
 #endif
     nxproxy->setEnvironment ( env );
 
-    connect ( nxproxy,SIGNAL ( error ( QProcess::ProcessError ) ),this,
+    connect ( nxproxy,SIGNAL ( errorOccurred ( QProcess::ProcessError ) ),this,
               SLOT ( slotProxyError ( QProcess::ProcessError ) ) );
     connect ( nxproxy,SIGNAL ( finished ( int,QProcess::ExitStatus ) ),this,
               SLOT ( slotProxyFinished ( int,QProcess::ExitStatus ) ) );
@@ -6951,7 +6951,7 @@ void ONMainWindow::slotProxyFinished ( int,QProcess::ExitStatus )
 
     x2goDebug<<"Deleting Proxy." ;
 
-    disconnect ( nxproxy,SIGNAL ( error ( QProcess::ProcessError ) ),this,
+    disconnect ( nxproxy,SIGNAL ( errorOccurred ( QProcess::ProcessError ) ),this,
                  SLOT ( slotProxyError ( QProcess::ProcessError ) ) );
     disconnect ( nxproxy,SIGNAL ( finished ( int,QProcess::ExitStatus ) ),this,
                  SLOT ( slotProxyFinished ( int,QProcess::ExitStatus ) ) );
