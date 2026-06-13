@@ -6553,7 +6553,6 @@ void ONMainWindow::slotTunnelOk(int)
             }
         }
 
-        QStringList options;
 #ifdef Q_OS_WIN
         //restore real path, as we not using cygwin for x2gokdriveclient
         nxroot=homeDir +"/.x2go";
