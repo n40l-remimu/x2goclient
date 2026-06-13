@@ -86,7 +86,7 @@ void PrintProcess::slot_processFinished ( int exitCode,
 			QProcess* proc=new QProcess;
 			proc->setStandardInputFile ( psFile );
 			connect ( proc,SIGNAL (
-			              error ( QProcess::ProcessError ) ),
+			              errorOccurred ( QProcess::ProcessError ) ),
 			          this,SLOT (
 			              slot_error (
 			                  QProcess::ProcessError ) ) );
@@ -221,7 +221,7 @@ void PrintProcess::print()
 			                  int,
 			                  QProcess::ExitStatus ) ) );
 			connect ( proc,SIGNAL (
-			              error ( QProcess::ProcessError ) ),
+			              errorOccurred ( QProcess::ProcessError ) ),
 			          this,SLOT (
 			              slot_pdf2psError (
 			                  QProcess::ProcessError ) ) );
