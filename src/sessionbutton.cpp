@@ -265,9 +265,9 @@ SessionButton::SessionButton ( ONMainWindow* mw,QWidget *parent, QString id )
     soundIcon->setFixedSize ( 16,16 );
     redraw();
 
-    connect ( cmdBox,SIGNAL ( activated ( const QString& ) ),this,
+    connect ( cmdBox,SIGNAL ( textActivated ( const QString& ) ),this,
               SLOT ( slot_cmd_change ( const QString& ) ) );
-    connect ( geomBox,SIGNAL ( activated ( const QString& ) ),this,
+    connect ( geomBox,SIGNAL ( textActivated ( const QString& ) ),this,
               SLOT ( slot_geom_change ( const QString& ) ) );
 
     editBut->setFocusPolicy ( Qt::NoFocus );
