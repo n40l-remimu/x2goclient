@@ -6473,7 +6473,7 @@ void ONMainWindow::slotTunnelOk(int)
 #endif
     nxproxy->setEnvironment ( env );
 
-    connect ( nxproxy,SIGNAL ( error ( QProcess::ProcessError ) ),this,
+    connect ( nxproxy,SIGNAL ( errorOccurred ( QProcess::ProcessError ) ),this,
               SLOT ( slotProxyError ( QProcess::ProcessError ) ) );
     connect ( nxproxy,SIGNAL ( finished ( int,QProcess::ExitStatus ) ),this,
               SLOT ( slotProxyFinished ( int,QProcess::ExitStatus ) ) );
@@ -6481,8 +6481,9 @@ void ONMainWindow::slotTunnelOk(int)
               SLOT ( slotProxyStderr() ) );
     connect ( nxproxy,SIGNAL ( readyReadStandardOutput() ),this,
               SLOT ( slotProxyStdout() ) );
-    QString proxyCmd="nxproxy -S nx/nx,options="+dirpath+"/options:"+
-                     resumingSession.display;
+    QString proxyCmd="nxproxy";
+    QStringList options = {"-S", "nx/nx,options="+dirpath+"/options:"+resumingSession.display };
+
 #ifdef Q_OS_WIN
     if(! QFile::exists(appDir+"/nxproxy.exe"))
     {
@@ -6598,7 +6599,7 @@ void ONMainWindow::slotTunnelOk(int)
     else
     {
         x2goDebug<<"Starting NX proxy, command: " + proxyCmd;
-        nxproxy->start ( proxyCmd);
+        nxproxy->start ( proxyCmd, options);
     }
 
     proxyRunning=true;
@@ -6942,7 +6943,7 @@ void ONMainWindow::slotProxyFinished ( int,QProcess::ExitStatus )
 
     x2goDebug<<"Deleting Proxy." ;
 
-    disconnect ( nxproxy,SIGNAL ( error ( QProcess::ProcessError ) ),this,
+    disconnect ( nxproxy,SIGNAL ( errorOccurred ( QProcess::ProcessError ) ),this,
                  SLOT ( slotProxyError ( QProcess::ProcessError ) ) );
     disconnect ( nxproxy,SIGNAL ( finished ( int,QProcess::ExitStatus ) ),this,
                  SLOT ( slotProxyFinished ( int,QProcess::ExitStatus ) ) );
