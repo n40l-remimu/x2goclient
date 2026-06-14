@@ -86,7 +86,7 @@ ConnectionWidget::ConnectionWidget ( QString id, ONMainWindow * mw,
 	connLay->addWidget ( compr );
 	connLay->addStretch();
 
-	connect ( packMethode,SIGNAL ( activated ( const QString& ) ),this,
+	connect ( packMethode,SIGNAL ( textActivated ( const QString& ) ),this,
 	          SLOT ( slot_changePack ( const QString& ) ) );
 	readConfig();
 }
