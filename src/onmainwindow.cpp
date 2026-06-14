@@ -3711,7 +3711,7 @@ void ONMainWindow::startDirectRDP()
 
     nxproxy=new QProcess;
     proxyErrString="";
-    connect ( nxproxy,SIGNAL ( error ( QProcess::ProcessError ) ),this,
+    connect ( nxproxy,SIGNAL ( errorOccurred ( QProcess::ProcessError ) ),this,
               SLOT ( slotProxyError ( QProcess::ProcessError ) ) );
     connect ( nxproxy,SIGNAL ( finished ( int,QProcess::ExitStatus ) ),this,
               SLOT ( slotProxyFinished ( int,QProcess::ExitStatus ) ) );
