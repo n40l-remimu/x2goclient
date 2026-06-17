@@ -3711,7 +3711,7 @@ void ONMainWindow::startDirectRDP()
 
     nxproxy=new QProcess;
     proxyErrString="";
-    connect ( nxproxy,SIGNAL ( error ( QProcess::ProcessError ) ),this,
+    connect ( nxproxy,SIGNAL ( errorOccurred ( QProcess::ProcessError ) ),this,
               SLOT ( slotProxyError ( QProcess::ProcessError ) ) );
     connect ( nxproxy,SIGNAL ( finished ( int,QProcess::ExitStatus ) ),this,
               SLOT ( slotProxyFinished ( int,QProcess::ExitStatus ) ) );
@@ -9951,7 +9951,7 @@ void ONMainWindow::slotStartPGPAuth()
               this,
               SLOT (
                   slotScDaemonFinished ( int, QProcess::ExitStatus ) ) );
-    connect (scDaemon, SIGNAL (error (QProcess::ProcessError)), this,
+    connect (scDaemon, SIGNAL (errorOccurred (QProcess::ProcessError)), this,
              SLOT (slotScDaemonError (QProcess::ProcessError)));
     scDaemon->start ( "pcsc_scan -n");
 
