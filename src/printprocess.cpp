@@ -86,7 +86,7 @@ void PrintProcess::slot_processFinished ( int exitCode,
 			QProcess* proc=new QProcess;
 			proc->setStandardInputFile ( psFile );
 			connect ( proc,SIGNAL (
-			              error ( QProcess::ProcessError ) ),
+			              errorOccurred ( QProcess::ProcessError ) ),
 			          this,SLOT (
 			              slot_error (
 			                  QProcess::ProcessError ) ) );
@@ -156,7 +156,7 @@ void PrintProcess::openPdf()
 		homePath +="\\x2goprint.pdf";
 #endif
 		QString fileName = QFileDialog::getSaveFileName ( 0,
-		                   tr ( "Save File" ),					
+		                   tr ( "Save File" ),
 		                   homePath,
 		                   tr ( "PDF Document (*.pdf)" ) );
 		if ( fileName.length() >0 )
@@ -221,7 +221,7 @@ void PrintProcess::print()
 			                  int,
 			                  QProcess::ExitStatus ) ) );
 			connect ( proc,SIGNAL (
-			              error ( QProcess::ProcessError ) ),
+			              errorOccurred ( QProcess::ProcessError ) ),
 			          this,SLOT (
 			              slot_pdf2psError (
 			                  QProcess::ProcessError ) ) );

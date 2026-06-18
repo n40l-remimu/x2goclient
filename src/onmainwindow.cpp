@@ -3711,7 +3711,7 @@ void ONMainWindow::startDirectRDP()
 
     nxproxy=new QProcess;
     proxyErrString="";
-    connect ( nxproxy,SIGNAL ( error ( QProcess::ProcessError ) ),this,
+    connect ( nxproxy,SIGNAL ( errorOccurred ( QProcess::ProcessError ) ),this,
               SLOT ( slotProxyError ( QProcess::ProcessError ) ) );
     connect ( nxproxy,SIGNAL ( finished ( int,QProcess::ExitStatus ) ),this,
               SLOT ( slotProxyFinished ( int,QProcess::ExitStatus ) ) );
@@ -6473,7 +6473,7 @@ void ONMainWindow::slotTunnelOk(int)
 #endif
     nxproxy->setEnvironment ( env );
 
-    connect ( nxproxy,SIGNAL ( error ( QProcess::ProcessError ) ),this,
+    connect ( nxproxy,SIGNAL ( errorOccurred ( QProcess::ProcessError ) ),this,
               SLOT ( slotProxyError ( QProcess::ProcessError ) ) );
     connect ( nxproxy,SIGNAL ( finished ( int,QProcess::ExitStatus ) ),this,
               SLOT ( slotProxyFinished ( int,QProcess::ExitStatus ) ) );
@@ -6481,8 +6481,9 @@ void ONMainWindow::slotTunnelOk(int)
               SLOT ( slotProxyStderr() ) );
     connect ( nxproxy,SIGNAL ( readyReadStandardOutput() ),this,
               SLOT ( slotProxyStdout() ) );
-    QString proxyCmd="nxproxy -S nx/nx,options="+dirpath+"/options:"+
-                     resumingSession.display;
+    QString proxyCmd="nxproxy";
+    QStringList options = {"-S", "nx/nx,options="+dirpath+"/options:"+resumingSession.display };
+
 #ifdef Q_OS_WIN
     if(! QFile::exists(appDir+"/nxproxy.exe"))
     {
@@ -6552,7 +6553,6 @@ void ONMainWindow::slotTunnelOk(int)
             }
         }
 
-        QStringList options;
 #ifdef Q_OS_WIN
         //restore real path, as we not using cygwin for x2gokdriveclient
         nxroot=homeDir +"/.x2go";
@@ -6598,7 +6598,7 @@ void ONMainWindow::slotTunnelOk(int)
     else
     {
         x2goDebug<<"Starting NX proxy, command: " + proxyCmd;
-        nxproxy->start ( proxyCmd);
+        nxproxy->start ( proxyCmd, options);
     }
 
     proxyRunning=true;
@@ -6942,7 +6942,7 @@ void ONMainWindow::slotProxyFinished ( int,QProcess::ExitStatus )
 
     x2goDebug<<"Deleting Proxy." ;
 
-    disconnect ( nxproxy,SIGNAL ( error ( QProcess::ProcessError ) ),this,
+    disconnect ( nxproxy,SIGNAL ( errorOccurred ( QProcess::ProcessError ) ),this,
                  SLOT ( slotProxyError ( QProcess::ProcessError ) ) );
     disconnect ( nxproxy,SIGNAL ( finished ( int,QProcess::ExitStatus ) ),this,
                  SLOT ( slotProxyFinished ( int,QProcess::ExitStatus ) ) );
@@ -9951,7 +9951,7 @@ void ONMainWindow::slotStartPGPAuth()
               this,
               SLOT (
                   slotScDaemonFinished ( int, QProcess::ExitStatus ) ) );
-    connect (scDaemon, SIGNAL (error (QProcess::ProcessError)), this,
+    connect (scDaemon, SIGNAL (errorOccurred (QProcess::ProcessError)), this,
              SLOT (slotScDaemonError (QProcess::ProcessError)));
     scDaemon->start ( "pcsc_scan -n");
 
