@@ -83,8 +83,23 @@ namespace unixhelper {
       std::cerr << "WARNING: unable to send SIGTERM to process group '" << pgid << "': " << std::strerror (saved_errno) << std::endl;
     }
 
-    /* Grant a grace period of (at least) 10 seconds. */
-    sleep (10);
+    /* Test 10 seconds if the programs did terminate. Else kill them */
+    for (int i=0; i<10; i++) {
+      sleep(1);
+
+      if (0 != killpg(pgid, 0)) {
+        const int saved_errno = errno;
+
+        if (ESRCH == saved_errno) {
+          /* no more process in the group. exit successfully */
+          std::exit (EXIT_SUCCESS);
+        }
+        else {
+          std::cerr << "WARNING: unable to request process group '" << pgid << "': " << std::strerror (saved_errno) << std::endl;
+          break;
+        }
+      }
+    }
 
     int kill_ret = killpg (pgid, SIGKILL);
 
