@@ -894,7 +894,7 @@ void ONMainWindow::initWidgetsNormal()
     uframe=new QFrame();
     users->setWidget ( uframe );
 
-    mainL->insertWidget ( 1, ln );
+    mainL->insertWidget ( 0, ln );
 //     mainL->addWidget ( users );
     mainL->addLayout(vblay);
 
