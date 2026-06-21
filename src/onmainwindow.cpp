@@ -7107,9 +7107,18 @@ void ONMainWindow::slotProxyStderr()
     if(debugging)
     {
         QFile fl(homeDir+"/.x2go/S-"+resumingSession.sessionId+"/session.log");
-        fl.open(QIODevice::WriteOnly|QIODevice::Append);
-        fl.write(reserr.toLocal8Bit());
-        fl.close();
+        int f = fl.open(QIODevice::WriteOnly|QIODevice::Append);
+        if (-1 == f) {
+          QMessageBox::warning ( NULL, ( "Error" ),
+                                               QObject::tr( "Error opening session log file:" )
+                                               + "<br>" + strerror(errno),
+                                              QMessageBox::Ok,
+                                              QMessageBox::NoButton );
+        }
+        else {
+          fl.write(reserr.toLocal8Bit());
+          fl.close();
+        }
     }
 
     stInfo->insertPlainText ( reserr );
@@ -9508,28 +9517,37 @@ void ONMainWindow::slotRetExportDir ( bool result,QString output,
     }
 
     QTemporaryFile tfile (authorized_keys_file.fileName ());
-    tfile.open ();
-    tfile.setPermissions (QFile::ReadOwner | QFile::WriteOwner);
-    tfile.setAutoRemove (true);
-    QTextStream out (&tfile);
-
-    /*
-     * Copy the content of the authorized_keys file to our new temporary file
-     * and remove the public authorized key for the current "session" again.
-     */
-    while (!authorized_keys_file.atEnd ()) {
-      QByteArray newline = authorized_keys_file.readLine ();
-      if (newline != line)
-        out << newline;
+    int f = tfile.open ();
+    if (-1 == f) {
+      QMessageBox::warning ( NULL, ( "Error" ),
+          QObject::tr( "Error opening temporary file:" )
+          + "<br>" + strerror(errno),
+          QMessageBox::Ok,
+          QMessageBox::NoButton );
     }
+    else {
+      tfile.setPermissions (QFile::ReadOwner | QFile::WriteOwner);
+      tfile.setAutoRemove (true);
+      QTextStream out (&tfile);
 
-    authorized_keys_file.close ();
-    tfile.close ();
+      /*
+       * Copy the content of the authorized_keys file to our new temporary file
+       * and remove the public authorized key for the current "session" again.
+       */
+      while (!authorized_keys_file.atEnd ()) {
+        QByteArray newline = authorized_keys_file.readLine ();
+        if (newline != line)
+          out << newline;
+      }
 
-    authorized_keys_file.remove ();
+      authorized_keys_file.close ();
+      tfile.close ();
 
-    tfile.copy (authorized_keys_file.fileName ());
-    QFile::remove (key + ".pub");
+      authorized_keys_file.remove ();
+
+      tfile.copy (authorized_keys_file.fileName ());
+      QFile::remove (key + ".pub");
+    }
 }
 
 
@@ -11614,7 +11632,17 @@ QString ONMainWindow::generateKey (ONMainWindow::key_types key_type, bool host_k
     }
     else {
       QTemporaryFile temp_file (base_dir + "/key");
-      temp_file.open ();
+      int f = temp_file.open ();
+      if (-1 == f) {
+        QMessageBox::warning ( NULL, ( "Error" ),
+            QObject::tr( "Error opening temporary file:" )
+            + "<br>" + strerror(errno),
+            QMessageBox::Ok,
+            QMessageBox::NoButton );
+      }
+      /* no else path implemented, because we need only the
+       * file name of the temp file.
+       */
 
       /* Extract base name. */
       QFileInfo tmp_file_info (temp_file.fileName ());
@@ -13988,7 +14016,17 @@ void ONMainWindow::slotResLoadRequestFinished(QNetworkReply* reply)
         if(resReply.length()==1)
         {
             QTemporaryFile fl;
-            fl.open();
+            int f = fl.open();
+            if (-1 == f) {
+              QMessageBox::warning ( NULL, ( "Error" ),
+                  QObject::tr( "Error opening temporary file:" )
+                  + "<br>" + strerror(errno),
+                  QMessageBox::Ok,
+                  QMessageBox::NoButton );
+            }
+            /* no else path implemented, because we need only the
+             * file name of the temp file.
+             */
             resourceTmpDir= new QDir(fl.fileName()+"_d");
             fl.close();
             resourceDir=resourceTmpDir->path();
@@ -14015,9 +14053,18 @@ void ONMainWindow::slotResLoadRequestFinished(QNetworkReply* reply)
             QString path="/"+parts.join("/");
             resourceTmpDir->mkpath(path);
             QFile file(path+"/"+fname);
-            file.open(QIODevice::WriteOnly);
-            file.write(reply->readAll());
-            file.close();
+            int f = file.open(QIODevice::WriteOnly);
+            if (-1 == f) {
+              QMessageBox::warning ( NULL, ( "Error" ),
+                  QObject::tr( "Error opening file:" )
+                  + "<br>" + strerror(errno),
+                  QMessageBox::Ok,
+                  QMessageBox::NoButton );
+            }
+            else {
+              file.write(reply->readAll());
+              file.close();
+            }
         }
     }
     foreach(QNetworkReply* r, resReply)
