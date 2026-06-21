@@ -5453,25 +5453,24 @@ void ONMainWindow::slotResumeSess()
     }
     else
     {
-        int res;
-        res=QMessageBox::warning (
-                0l,tr ( "Warning" ),
-                tr ("Your current color depth is different from "
-                    "the session's color depth. This may cause "
-                    "problems reconnecting to this session and "
-                    "in most cases <b>you will lose the "
-                    "session</b> and have to start a new one! ")
-              + tr ("It's highly recommended to change the color "
-                    "depth of your display to %n bit(s) and "
-                    "restart your X.Org Server before you "
-                    "reconnect to this X2Go session.",
-                    "%n will be replaced with a number",
-                    s.colorDepth)
-              + tr ("<br />"
-                    "Do you want to resume this session anyway?"),
-                tr ( "Yes" ),
-                tr ( "No" ) );
-        if ( res==0 )
+        QMessageBox msgBox(this);
+        msgBox.setIcon(QMessageBox::Warning);
+        msgBox.setText(tr ("Your current color depth is different from "
+            "the session's color depth. This may cause "
+            "problems reconnecting to this session and "
+            "in most cases <b>you will lose the "
+            "session</b> and have to start a new one! ")
+            + tr ("It's highly recommended to change the color "
+            "depth of your display to %n bit(s) and "
+            "restart your X.Org Server before you "
+            "reconnect to this X2Go session.",
+            "%n will be replaced with a number",
+            s.colorDepth));
+        msgBox.setInformativeText(tr ("Do you want to resume this session anyway?"));
+        msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+        msgBox.setDefaultButton(QMessageBox::No);
+        int res = msgBox.exec();
+        if ( QMessageBox::Yes==res )
             resumeSession ( s );
     }
 
