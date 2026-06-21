@@ -154,6 +154,8 @@ struct x2goSession
     enum {DESKTOP,ROOTLESS,SHADOW, KDRIVE, ROOTLESSKDRIVE} sessionType;
     QString command;
     void operator = ( const x2goSession& s );
+    x2goSession(const x2goSession &s);
+    x2goSession();
 };
 
 struct ConfigFile

@@ -48,6 +48,19 @@ void x2goSession::operator = ( const x2goSession& s )
     command=s.command;
 }
 
+x2goSession::x2goSession(const x2goSession &s )
+{
+  this->operator =(s);
+}
+
+x2goSession::x2goSession()
+: published(false),
+  colorDepth(0),
+  fullscreen(false),
+  sessionType(DESKTOP)
+{
+}
+
 bool	ONMainWindow::portable=false;
 QString ONMainWindow::homeDir;
 QString ONMainWindow::sessionCfg;
