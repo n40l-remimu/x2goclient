@@ -1562,6 +1562,7 @@ void ONMainWindow::closeClient()
         disconnect(pulseManager, SIGNAL(sig_pulse_user_warning(bool, const QString&, const QString&, bool)),
                    this, SLOT(slotShowPAMSGDialog(bool, const QString&, const QString&, bool)));
         delete (pulseManager);
+        pulseManager = NULL;
 
         if (pulseManagerThread) {
 
@@ -1570,6 +1571,7 @@ void ONMainWindow::closeClient()
         }
 
         delete (pulseManagerThread);
+        pulseManagerThread = NULL;
     }
 #endif /* defined (Q_OS_DARWIN) || defined (Q_OS_WIN) */
 
@@ -1602,6 +1604,7 @@ void ONMainWindow::closeClient()
 
         x2goDebug << "Terminated the OpenSSH server.";
         delete sshd;
+        sshd = NULL;
     }
 #endif /* !defined (Q_OS_WIN) */
 
@@ -1629,6 +1632,7 @@ void ONMainWindow::closeClient()
     {
         removeDir(resourceTmpDir->path());
         delete resourceTmpDir;
+        resourceTmpDir = NULL;
     }
 
     if (ssh_finalize ()) {
@@ -1639,6 +1643,7 @@ void ONMainWindow::closeClient()
     }
 
     delete (bBrokerLogout);
+    bBrokerLogout = NULL;
 
     x2goInfof(7)<<tr("Finished X2Go Client closing hooks.");
 }
